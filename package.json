@@ -36,6 +36,13 @@
     "typecheck": "tsc",
     "prepare": "simple-git-hooks"
   },
+  "peerDependencies": {
+    "vue": "^3.5.24"
+  },
+  "dependencies": {
+    "@vueuse/core": "catalog:",
+    "@vueuse/shared": "catalog:"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
     "@antfu/ni": "catalog:cli",
@@ -52,6 +59,7 @@
     "vite": "catalog:cli",
     "vitest": "catalog:testing",
     "vitest-package-exports": "catalog:testing",
+    "vue": "catalog:",
     "yaml": "catalog:testing"
   },
   "simple-git-hooks": {
