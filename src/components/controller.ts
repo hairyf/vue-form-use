@@ -1,4 +1,6 @@
-import type { FieldPath, FieldValues } from '../types'
+import type { SetupContext, VNode, VNodeChild } from 'vue'
+import type { ChangeHandler, Control, FieldPath, FieldPathValue, FieldValues } from '../types'
+import { defineComponent } from 'vue'
 
 export interface ControllerProps<
   Values extends FieldValues,
@@ -20,6 +22,9 @@ export interface FieldProps<
   disabled?: boolean
 }
 
+export interface ControllerSlots<Values extends FieldValues> {
+  default: (props: FieldProps<Values>) => VNode
+}
 /**
  * Component based on `useController` hook to work with controlled component.
  *
@@ -57,11 +62,16 @@ export interface FieldProps<
  * ```
  */
 
-export const Controller = defineComponent({
-  props: {
-    control: {
-      type: Object as PropType<Control<any, any, any>>,
-      required: true,
-    },
+export const Controller = defineComponent(
+  <
+    Values extends FieldValues,
+    Name extends FieldPath<Values> = FieldPath<Values>,
+    TransformedValues extends FieldValues = Values,
+  >(props: ControllerProps<Values, Name, TransformedValues>,
+    context: SetupContext<ControllerSlots<Values>>,
+  ) => {
+    return () => {
+      const registerProps = props.control.register(props.name)
+    }
   },
-})
+)
