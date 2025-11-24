@@ -1,12 +1,12 @@
-import type { FieldPath, FieldPathValue, FieldValues } from '../types'
+import type { FieldValues } from '../types'
 
 /**
  * Set nested value in object by path string
  */
-export function set<Values extends FieldValues, ValueName extends FieldPath<Values>>(
+export function set<Values extends FieldValues>(
   obj: Values,
-  path: ValueName,
-  value: FieldPathValue<Values, ValueName>,
+  path: string,
+  value: any,
 ): void {
   const keys = path.split('.')
   const lastKey = keys.pop()!

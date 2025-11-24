@@ -4,30 +4,31 @@ import type {
   Control,
   DefaultValues,
   FieldError,
+  FieldErrors,
   FieldPath,
   FieldPathValue,
   Fields,
   FieldState,
   FieldValues,
   FocusOptions,
-  FormProps,
   InternalFieldName,
   KeepStateOptions,
   RegisterOptions,
   ResetAction,
   ResetFieldConfig,
+  ResolverOptions,
   State,
   SubmitErrorHandler,
   SubmitHandler,
   TriggerConfig,
   UnregisterOptions,
   UpdateOptions,
+  UseFormProps,
 } from '../types'
-import { cloneDeep, isBrowser, isElement, toArray } from '@hairy/utils'
 import { reactiveComputed } from '@vueuse/core'
 import { computed, reactive, ref } from 'vue'
 import { ELEMENT_EVENT_MAP, ELEMENT_VALUE_MAP } from '../constants'
-import { get, resolve, resolveFlattenFields, set, unset } from '../utils'
+import { deepClone, get, isBrowser, isElement, resolve, resolveFlattenFields, set, toArray, unset } from '../utils'
 
 import { useDefaultValues } from './use-default-values'
 
@@ -36,7 +37,7 @@ export function useControl<
   Context = any,
   TransformedValues extends FieldValues = Values,
 >(
-  props: FormProps<Values, Context, TransformedValues>,
+  props: UseFormProps<Values, Context, TransformedValues>,
   values: Ref<Values>,
   state: State<Values>,
   names: Set<InternalFieldName>,
@@ -62,7 +63,7 @@ export function useControl<
     const names = _mergeNames(name)
     const options: ResolverOptions<Values> = {
       names,
-      fields: resolveFlattenFields(names, fields),
+      fields: resolveFlattenFields(names, fields) as any,
       shouldUseNativeValidation: props.shouldUseNativeValidation,
       criteriaMode: props.criteriaMode,
     }
@@ -73,8 +74,8 @@ export function useControl<
     )
     set(state.fields, `${name}.isValidating`, false)
     return {
-      values: cloneDeep(result?.values || values.value),
-      errors: result?.errors || {},
+      values: deepClone(result?.values || values.value) as Values,
+      errors: (result?.errors || {}) as unknown as FieldErrors<Values>,
     }
   }
 
@@ -137,15 +138,16 @@ export function useControl<
 
   function focus(name: FieldPath<Values>, options?: FocusOptions): void {
     const field = get(fields, name)
-    const ref = field._f.ref
+    const ref = field?._f.ref
     if (!ref)
       return
     options?.shouldSelect ? ref.select?.() : ref.focus?.()
   }
 
   function register(name: FieldPath<Values>, options?: RegisterOptions): any {
-    if (get(fields, name))
-      return get(fields, name)._p
+    const cachedField = get(fields, name)
+    if (cachedField)
+      return cachedField._p
 
     const _f = reactive({
       ref: ref(),
@@ -239,10 +241,10 @@ export function useControl<
     options?: KeepStateOptions,
   ): void {
     const resolved = resolve(_values, { args: [values.value] })
-    const nextValues = cloneDeep(resolved || defaultValues.value)
+    const nextValues = deepClone(resolved || defaultValues.value)
 
     if (!options?.keepDefaultValues)
-      defaultValues.value = nextValues
+      defaultValues.value = nextValues as unknown as DefaultValues<Values>
 
     if (!options?.keepValues) {
       if (options?.keepDirtyValues) {
@@ -268,14 +270,14 @@ export function useControl<
       }
     }
 
-    values.value = props.shouldUnregister
+    values.value = (props.shouldUnregister
       ? options?.keepDefaultValues
-        ? cloneDeep(defaultValues.value)
+        ? deepClone(defaultValues.value)
         : {}
-      : nextValues
+      : nextValues) as Values
 
     for (const name of names) {
-      const fieldState = get(fields, name)
+      const fieldState = get(fields, name)!
       set(state.fields, name, {
         isValidating: options?.keepIsValidating ? fieldState.isValidating : false,
         isValid: options?.keepIsValid ? fieldState.isValid : false,
@@ -348,7 +350,7 @@ export function useControl<
 
       if (state.form.isValid) {
         try {
-          await onValid(values as TransformedValues, e)
+          await onValid(values as unknown as TransformedValues, e)
         }
         catch (error) {
           onValidError = error
@@ -372,6 +374,7 @@ export function useControl<
   }
 
   const control = {
+    _values: values,
     _runSchema,
     _resetDefaultValues,
 

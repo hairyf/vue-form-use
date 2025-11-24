@@ -46,6 +46,7 @@ export interface Control<
   // _focusError: InternalFocusError
   // _disableForm: InternalDisableForm
 
+  _values: Values
   _runSchema: InternalRunSchema
   _resetDefaultValues: Noop
 

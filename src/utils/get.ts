@@ -1,14 +1,13 @@
-import type { FieldPath, FieldPathValue, FieldValues } from '../types'
+import type { FieldPathValue, FieldValues } from '../types'
 
 /**
  * Get nested value from object by path string
  */
 export function get<
   Values extends FieldValues,
-  ValueName extends FieldPath<Values>,
 >(
   obj: Values,
-  path: ValueName,
+  path: string,
 ): FieldPathValue<Values, ValueName> | undefined {
   const keys = path.split('.')
   let result: any = obj

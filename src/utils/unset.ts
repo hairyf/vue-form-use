@@ -3,7 +3,7 @@ import type { FieldPath, FieldValues } from '../types'
 /**
  * Delete nested value from object by path string
  */
-export function unset<Values extends FieldValues, ValueName extends FieldPath<Values>>(obj: Values, path: ValueName): void {
+export function unset<Values extends FieldValues>(obj: Values, path: string): void {
   const keys = path.split('.')
   const lastKey = keys.pop()!
   let current: any = obj

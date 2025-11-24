@@ -15,13 +15,18 @@
   "bugs": "https://github.com/antfu/pkg-placeholder/issues",
   "keywords": [],
   "sideEffects": false,
-  "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json"
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "publishConfig": {
+    "exports": {
+      ".": "./dist/index.mjs",
+      "./package.json": "./package.json"
+    },
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts"
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],

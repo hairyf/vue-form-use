@@ -1,0 +1,36 @@
+import type { Control } from './control'
+import type { ChangeHandler } from './fields'
+import type { FieldPath, FieldPathValue } from './path'
+import type { State } from './state'
+import type { FieldValues } from './struct'
+
+export interface FieldProps<
+  Values extends FieldValues,
+  Name extends FieldPath<Values> = FieldPath<Values>,
+> {
+  name: Name
+  value: FieldPathValue<Values, Name>
+  onChange: ChangeHandler
+  onBlur: ChangeHandler
+  disabled?: boolean
+}
+
+export interface UseControllerProps<
+  Values extends FieldValues = FieldValues,
+  Name extends FieldPath<Values> = FieldPath<Values>,
+  TransformedValues extends FieldValues = Values,
+> {
+  control: Control<Values, any, TransformedValues>
+  name: Name
+  shouldUnregister?: boolean
+  defaultValue?: FieldPathValue<Values, Name>
+  disabled?: boolean
+}
+
+export interface UseControllerInstance<
+  Values extends FieldValues = FieldValues,
+  Name extends FieldPath<Values> = FieldPath<Values>,
+> {
+  state: State<Values>
+  field: FieldProps<Values, Name>
+}

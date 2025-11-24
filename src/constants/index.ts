@@ -14,6 +14,14 @@ export const ELEMENT_VALUE_MAP = {
   SELECT: 'value',
 }
 
+export const EVENTS = {
+  BLUR: 'blur',
+  FOCUS_OUT: 'focusout',
+  CHANGE: 'change',
+} as const
+
+export type ElementMapKey = keyof typeof ELEMENT_EVENT_MAP
+
 export const ELEMENT_EVENT_MAP = {
   CHECKBOX: 'onChange',
   RADIO: 'onChange',

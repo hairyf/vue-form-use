@@ -1,6 +1,7 @@
-import type { SetupContext, VNode, VNodeChild } from 'vue'
-import type { ChangeHandler, Control, FieldPath, FieldPathValue, FieldValues } from '../types'
+import type { SetupContext, Slot, SlotsType, VNode } from 'vue'
+import type { Control, FieldPath, FieldProps, FieldValues } from '../types'
 import { defineComponent } from 'vue'
+import { useController } from '../composable/use-controller'
 
 export interface ControllerProps<
   Values extends FieldValues,
@@ -11,20 +12,9 @@ export interface ControllerProps<
   control: Control<Values, any, TransformedValues>
 }
 
-export interface FieldProps<
-  Values extends FieldValues,
-  Name extends FieldPath<Values> = FieldPath<Values>,
-> {
-  name: Name
-  value: FieldPathValue<Values, Name>
-  onChange: ChangeHandler
-  onBlur: ChangeHandler
-  disabled?: boolean
-}
-
-export interface ControllerSlots<Values extends FieldValues> {
-  default: (props: FieldProps<Values>) => VNode
-}
+export type ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> = SlotsType<{
+  default?: Slot<{ name: Name, field: FieldProps<Values, Name> }>
+}>
 /**
  * Component based on `useController` hook to work with controlled component.
  *
@@ -67,11 +57,12 @@ export const Controller = defineComponent(
     Values extends FieldValues,
     Name extends FieldPath<Values> = FieldPath<Values>,
     TransformedValues extends FieldValues = Values,
-  >(props: ControllerProps<Values, Name, TransformedValues>,
-    context: SetupContext<ControllerSlots<Values>>,
+  >(
+    props: ControllerProps<Values, Name, TransformedValues>,
+    context: SetupContext<unknown, ControllerSlots<Values, Name>>,
   ) => {
-    return () => {
-      const registerProps = props.control.register(props.name)
-    }
+    const controller = useController(props)
+    return () => context.slots.default?.({ name: props.name, field: controller.field })
   },
+
 )

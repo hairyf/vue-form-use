@@ -18,3 +18,11 @@ export function isPlainObject(value: any): value is object {
 export function isWeb(): boolean {
   return typeof window !== 'undefined'
 }
+
+export function isUndefined(value: any): value is undefined {
+  return value === undefined
+}
+
+export function isElement(value: any): value is Element {
+  return value instanceof Element
+}
