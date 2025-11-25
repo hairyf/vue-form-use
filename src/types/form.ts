@@ -72,3 +72,5 @@ export interface UseFormReturn<
 
   focus: Focus<Values>
 }
+
+export type UseFormContext = Partial<UseFormReturn>
