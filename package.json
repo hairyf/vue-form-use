@@ -1,7 +1,7 @@
 {
   "name": "vue-form-use",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "pnpm@10.20.0",
   "description": "Performant, flexible and extensible forms with easy-to-use validation for Vue 3",
   "author": "Hairyf <wwu710632@gmail.com>",
