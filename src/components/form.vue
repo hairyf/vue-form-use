@@ -3,7 +3,7 @@
 import type { FieldValues } from '../types'
 import type { FormHTMLAttributes, FormProps, SubmitEvents } from './form'
 import { useAttrs } from 'vue'
-import { fetchByAction, stringifyData } from '../logic'
+import { fetchByAction, stringifyData } from 'vue-form-use'
 
 const props = defineProps<FormProps<Values, TransformedValues>>()
 defineEmits<{

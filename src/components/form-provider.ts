@@ -12,27 +12,31 @@ import { formInjectionKey } from '../constants'
  * @param props - all useForm methods
  *
  * @example
- * ```tsx
- * function App() {
- *   const methods = useForm();
- *   const onSubmit = data => console.log(data);
+ * ```vue
+ * <script setup lang="ts">
+ *   const { control } = useForm<FormValues>({
+ *     defaultValues: {
+ *       test: ""
+ *     }
+ *   });
+ * </script>
  *
- *   return (
- *     <FormProvider {...methods} >
- *       <form onSubmit={methods.handleSubmit(onSubmit)}>
- *         <NestedInput />
- *         <input type="submit" />
- *       </form>
- *     </FormProvider>
- *   );
- * }
- *
- *  function NestedInput() {
- *   const { register } = useFormContext(); // retrieve all hook methods
- *   return <input {...register("test")} />;
- * }
+ * <template>
+ *   <form>
+ *     <controller :control="control" name="test" #="{ field: { onChange, onBlur, value, ref }, state }">
+ *       <input
+ *         @input="onChange"
+ *         @blur="onBlur"
+ *         :value="value"
+ *       />
+ *       <p>{{ state.isSubmitted ? "submitted" : "" }}</p>
+ *       <p>{{ state.isTouched ? "touched" : "" }}</p>
+ *     </controller>
+ *   </form>
+ * </template>
  * ```
  */
+
 export type FormProvider = new<
   Values extends FieldValues,
   Context = any,

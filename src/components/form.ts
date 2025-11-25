@@ -1,27 +1,3 @@
-/* eslint-disable ts/no-redeclare */
-/**
- * Form component to manage submission.
- *
- * @param props - to setup submission detail. {@link FormProps}
- *
- * @returns form component or headless render prop.
- *
- * @example
- * ```vue
- * <script setup lang="ts">
- *   const { control, register, errors } = useForm();
- * </script>
- *
- * <template>
- *   <form action="/api" v-bind="control">
- *     <input v-bind="register('name')" />
- *     <p>{{ errors?.root?.server && 'Server error' }}</p>
- *     <button>Submit</button>
- *   </form>
- * </template>
- * ```
- */
-
 import type { FormHTMLAttributes as _FormHTMLAttributes } from 'vue'
 import type { Control, FieldValues } from '../types'
 import { defineComponent, h } from 'vue'
@@ -51,6 +27,29 @@ export interface FormProps<
   validate?: (response: Response) => Promise<boolean> | boolean
 }
 
+/* eslint-disable ts/no-redeclare */
+/**
+ * Form component to manage submission.
+ *
+ * @param props - to setup submission detail. {@link FormProps}
+ *
+ * @returns form component or headless render prop.
+ *
+ * @example
+ * ```vue
+ * <script setup lang="ts">
+ *   const { control, register, errors } = useForm();
+ * </script>
+ *
+ * <template>
+ *   <form action="/api" :control="control">
+ *     <input :="register('name')" />
+ *     <p>{{ errors?.root?.server && 'Server error' }}</p>
+ *     <button>Submit</button>
+ *   </form>
+ * </template>
+ * ```
+ */
 export type Form = new<
   Values extends FieldValues,
   TransformedValues extends FieldValues = Values,
