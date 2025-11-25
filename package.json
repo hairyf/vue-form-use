@@ -1,23 +1,26 @@
 {
-  "name": "pkg-placeholder",
+  "name": "vue-form-use",
   "type": "module",
   "version": "0.0.0",
   "packageManager": "pnpm@10.20.0",
-  "description": "_description_",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "description": "Performant, flexible and extensible forms with easy-to-use validation for Vue 3",
+  "author": "Hairyf <wwu710632@gmail.com>",
   "license": "MIT",
-  "funding": "https://github.com/sponsors/antfu",
-  "homepage": "https://github.com/antfu/pkg-placeholder#readme",
+  "homepage": "https://github.com/hairyf/vue-form-use#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/pkg-placeholder.git"
+    "url": "git+https://github.com/hairyf/vue-form-use.git"
   },
-  "bugs": "https://github.com/antfu/pkg-placeholder/issues",
+  "bugs": "https://github.com/hairyf/vue-form-use/issues",
   "keywords": [],
   "sideEffects": false,
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "publishConfig": {
     "exports": {
       ".": "./dist/index.mjs",

@@ -1,42 +1,306 @@
-# pkg-placeholder
+# vue-form-use
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![bundle][bundle-src]][bundle-href]
-[![JSDocs][jsdocs-src]][jsdocs-href]
 [![License][license-src]][license-href]
 
-_description_
+Performant, flexible and extensible forms with easy-to-use validation for Vue 3.
 
-## Note for Developers
+## Features
 
-This starter recommands using [npm Trusted Publisher](https://github.com/e18e/ecosystem-issues/issues/201), where the release is done on CI to ensure the security of the packages.
+- 🚀 **Performant** - Minimal re-renders and optimized form state management
+- 📦 **Lightweight** - Small bundle size with zero dependencies (except Vue)
+- 🔒 **Type-safe** - Full TypeScript support with excellent type inference
+- 🎯 **Flexible** - Works with any form library and custom components
+- 🔧 **Extensible** - Easy to integrate with validation libraries
+- 🎨 **Composable** - Built with Vue 3 Composition API
 
-To do so, you need to run `pnpm publish` manually for the very first time to create the package on npm, and then go to `https://www.npmjs.com/package/<your-package-name>/access` to set the connection to your GitHub repo.
+## Installation
 
-Then for the future releases, you can run `pnpm run release` to do the release and the GitHub Actions will take care of the release process.
+```bash
+npm i vue-form-use
+# or
+pnpm add vue-form-use
+# or
+yarn add vue-form-use
+```
 
-## Sponsors
+## Usage
 
-<p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
-    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg'/>
-  </a>
-</p>
+### Basic Example
+
+```vue
+<script setup lang="ts">
+import { useForm } from 'vue-form-use'
+
+const { register, handleSubmit, errors } = useForm({
+  defaultValues: { name: '' }
+})
+
+const onSubmit = handleSubmit((data) => {
+  console.log(data)
+})
+</script>
+
+<template>
+  <form @submit="onSubmit">
+    <input :="register('name', { required: true })" placeholder="Name">
+    {{ errors.name?.message }}
+    <button type="submit">
+      Submit
+    </button>
+  </form>
+</template>
+```
+
+### Using Resolver Options
+
+```vue
+<script setup lang="ts">
+import { FieldError, useForm } from 'vue-form-use'
+import { yupResolver } from 'vue-form-use/resolver/yup'
+import * as yup from 'yup'
+
+const schema = yup.object({
+  name: yup.string().required('Name is required'),
+  email: yup.string().email('Invalid email').required('Email is required'),
+})
+
+const { register, handleSubmit, errors } = useForm({
+  defaultValues: { name: '' },
+  resolver: yupResolver(schema),
+})
+
+const onSubmit = handleSubmit((data) => {
+  console.log(data)
+})
+</script>
+
+<template>
+  <form @submit="onSubmit">
+    <input :="register('name')" placeholder="Name">
+    {{ errors.name?.message }}
+    <input :="register('email')" placeholder="Email">
+    {{ errors.email?.message }}
+    <button type="submit">
+      Submit
+    </button>
+  </form>
+</template>
+```
+
+### Using Controller Component
+
+For more complex scenarios or when you need fine-grained control, you can use the `Controller` component:
+
+```vue
+<script setup lang="ts">
+import { Controller, useForm } from 'vue-form-use'
+
+const { control, register, handleSubmit, errors } = useForm({
+  defaultValues: {
+    name: '',
+    email: '',
+  },
+})
+
+const onSubmit = handleSubmit((data) => {
+  console.log(data)
+})
+</script>
+
+<template>
+  <form @submit="onSubmit">
+    <Controller :control="control" name="name">
+      <template #default="{ field }">
+        <input
+          :value="field.value"
+          placeholder="Name"
+          @input="field.onChange"
+          @blur="field.onBlur"
+        >
+      </template>
+    </Controller>
+
+    <Controller :control="control" name="email">
+      <template #default="{ field }">
+        <input
+          :value="field.value"
+          placeholder="Email"
+          @input="field.onChange"
+          @blur="field.onBlur"
+        >
+      </template>
+    </Controller>
+
+    <button type="submit">
+      Submit
+    </button>
+  </form>
+</template>
+```
+
+### Form State
+
+Access form state including errors, validation status, and more:
+
+```vue
+<script setup lang="ts">
+import { useForm } from 'vue-form-use'
+
+const form = useForm({
+  defaultValues: {
+    email: '',
+  },
+})
+
+const email2 = form.watch('email')
+
+// Access form state
+const isDirty = computed(() => form.state.form.isDirty)
+const isValid = computed(() => form.state.form.isValid)
+</script>
+
+<template>
+  <form>
+    <input :="form.register('email')">
+    <p v-if="errors.email">
+      {{ errors.email.message }}
+    </p>
+    <!-- directly using field values, it has responsiveness -->
+    {{ form.values.email }}
+    <!-- or use a computed watch property -->
+    {{ email2 }}
+  </form>
+</template>
+```
+
+### Reset Form
+
+Reset the form to its default values:
+
+```vue
+<script setup lang="ts">
+import { useForm } from 'vue-form-use'
+
+const form = useForm({
+  defaultValues: {
+    name: '',
+    email: '',
+  },
+})
+</script>
+
+<template>
+  <form>
+    <input :="form.register('name')">
+    <input :="form.register('email')">
+    <button type="button" @click="form.reset()">
+      Reset
+    </button>
+  </form>
+</template>
+```
+
+## API
+
+### `useForm`
+
+The main composable for managing form state.
+
+#### Parameters
+
+```typescript
+function useForm(props: UseFormProps): UseFormReturn
+```
+
+- `defaultValues` - Default values for the form
+- `values` - Controlled form values
+- `mode` - Validation mode: `'onSubmit'` | `'onBlur'` | `'onChange'` | `'onTouched'` | `'all'`
+- `reValidateMode` - Re-validation mode: `'onChange'` | `'onBlur'` | `'onSubmit'`
+- `shouldFocusError` - Focus the first error field on submit (default: `true`)
+- `shouldUnregister` - Unregister fields on unmount (default: `false`)
+- `resolver` - Validation resolver function
+
+#### Returns
+
+- `values` - Reactive form values
+- `state` - Form state (errors, validation status, etc.)
+- `control` - Form control instance
+- `register` - Register a field
+- `unregister` - Unregister a field
+- `handleSubmit` - Handle form submission
+- `reset` - Reset the form
+- `resetField` - Reset a specific field
+- `update` - Update form values
+- `trigger` - Trigger validation
+- `setError` - Set field error manually
+- `clearError` - Clear field error
+- `focus` - Focus a field
+
+### `Controller`
+
+A component for managing individual form fields with scoped slots.
+
+#### Props
+
+- `name` - Field name (typed)
+- `control` - Form control instance from `useForm`
+
+#### Slots
+
+- `default` - Receives `{ field, state }` where:
+  - `field` - Field props (value, onChange, onBlur, etc.)
+  - `state` - Form state
+
+### `useController`
+
+A composable alternative to the `Controller` component.
+
+```ts
+const controller = useController({
+  control: form.control,
+  name: 'fieldName',
+})
+```
+
+## TypeScript
+
+Full TypeScript support with excellent type inference:
+
+```ts
+interface FormValues {
+  name: string
+  email: string
+  age: number
+}
+
+const form = useForm<FormValues>({
+  defaultValues: {
+    name: '',
+    email: '',
+    age: 0,
+  },
+})
+
+// Type-safe field access
+form.values.name // string
+form.values.email // string
+form.values.age // number
+```
 
 ## License
 
-[MIT](./LICENSE) License © [Anthony Fu](https://github.com/antfu)
+MIT License © 2024-PRESENT [Hairyf](https://github.com/hairyf)
 
-<!-- Badges -->
+---
 
-[npm-version-src]: https://img.shields.io/npm/v/pkg-placeholder?style=flat&colorA=080f12&colorB=1fa669
-[npm-version-href]: https://npmjs.com/package/pkg-placeholder
-[npm-downloads-src]: https://img.shields.io/npm/dm/pkg-placeholder?style=flat&colorA=080f12&colorB=1fa669
-[npm-downloads-href]: https://npmjs.com/package/pkg-placeholder
-[bundle-src]: https://img.shields.io/bundlephobia/minzip/pkg-placeholder?style=flat&colorA=080f12&colorB=1fa669&label=minzip
-[bundle-href]: https://bundlephobia.com/result?p=pkg-placeholder
-[license-src]: https://img.shields.io/github/license/antfu/pkg-placeholder.svg?style=flat&colorA=080f12&colorB=1fa669
-[license-href]: https://github.com/antfu/pkg-placeholder/blob/main/LICENSE
-[jsdocs-src]: https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669
-[jsdocs-href]: https://www.jsdocs.io/package/pkg-placeholder
+[npm-version-src]: https://img.shields.io/npm/v/vue-form-use?colorA=18181B&colorB=28CF8D&style=flat-square
+[npm-version-href]: https://npmjs.com/package/vue-form-use
+[npm-downloads-src]: https://img.shields.io/npm/dm/vue-form-use?colorA=18181B&colorB=28CF8D&style=flat-square
+[npm-downloads-href]: https://npmjs.com/package/vue-form-use
+[bundle-src]: https://img.shields.io/bundlephobia/minzip/vue-form-use?colorA=18181B&colorB=28CF8D&label=minzip&style=flat-square
+[bundle-href]: https://bundlephobia.com/result?p=vue-form-use
+[license-src]: https://img.shields.io/npm/l/vue-form-use?colorA=18181B&colorB=28CF8D&style=flat-square
+[license-href]: https://github.com/hairyf/vue-form-use/blob/main/LICENSE.md

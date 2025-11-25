@@ -1,6 +1,6 @@
 import type { DefaultValues } from './default-values'
 import type { FieldError, FieldErrors } from './errors'
-import type { FieldProps } from './fields'
+import type { FieldElementProps } from './fields'
 
 import type { FieldPath, FieldPathValue } from './path'
 import type { KeepStateOptions, ResetAction } from './reset'
@@ -242,7 +242,7 @@ export interface Unregister<Values extends FieldValues> {
 }
 
 export interface Register<Values extends FieldValues> {
-  <FieldName extends FieldPath<Values> = FieldPath<Values>>(name: FieldName): FieldProps<Values, FieldName>
+  <FieldName extends FieldPath<Values> = FieldPath<Values>>(name: FieldName): FieldElementProps<Values, FieldName>
 }
 
 export type FocusOptions = Partial<{
