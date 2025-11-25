@@ -35,12 +35,6 @@ catalogs:
     yaml: ^2.8.1
   types:
     '@types/node': ^24.10.0
-  conflicts_types_h24_10_1:
-    '@types/node': ^24.10.1
-  conflicts_cli_t5_9_3:
-    typescript: ~5.9.3
-  conflicts_cli_h7_2_4:
-    vite: ^7.2.4
 onlyBuiltDependencies:
   - esbuild
   - simple-git-hooks

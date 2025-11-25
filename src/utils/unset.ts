@@ -1,4 +1,4 @@
-import type { FieldPath, FieldValues } from '../types'
+import type { FieldValues } from '../types'
 
 /**
  * Delete nested value from object by path string
