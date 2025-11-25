@@ -1,3 +1,8 @@
+import type { FieldValues, UseFormReturn } from '../types'
+import { defineComponent, provide } from 'vue'
+import { formInjectionKey } from '../constants'
+
+/* eslint-disable ts/no-redeclare */
 /**
  * A provider component that propagates the `useForm` methods to all children components via [React Context](https://react.dev/reference/react/useContext) API. To be used with {@link useFormContext}.
  *
@@ -28,3 +33,40 @@
  * }
  * ```
  */
+export type FormProvider = new<
+  Values extends FieldValues,
+  Context = any,
+  TransformedValues extends FieldValues = Values,
+>(props: UseFormReturn<Values, Context, TransformedValues>) => {
+  $props: UseFormReturn<Values, Context, TransformedValues>
+  $slots: any
+}
+
+const Component = defineComponent(
+  (
+    props: UseFormReturn<any, any, any>,
+    { slots }: { slots: any },
+  ) => {
+    provide(formInjectionKey, props)
+    return slots.default?.()
+  },
+  {
+    props: [
+      'control',
+      'values',
+      'errors',
+      'state',
+      'trigger',
+      'reset',
+      'handleSubmit',
+      'setError',
+      'clearError',
+      'register',
+      'unregister',
+      'focus',
+      'resetField',
+    ] as any[],
+  },
+)
+
+export const FormProvider = Component as unknown as FormProvider

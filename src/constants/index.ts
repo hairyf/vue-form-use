@@ -1,3 +1,6 @@
+import type { InjectionKey } from 'vue'
+import type { UseFormReturn } from '../types'
+
 export const INPUT_VALIDATION_RULES = {
   max: 'max',
   min: 'min',
@@ -21,6 +24,8 @@ export const EVENTS = {
 } as const
 
 export type ElementMapKey = keyof typeof ELEMENT_EVENT_MAP
+
+export const formInjectionKey = Symbol('Injection') as InjectionKey<UseFormReturn>
 
 export const ELEMENT_EVENT_MAP = {
   CHECKBOX: 'onChange',

@@ -15,12 +15,13 @@ async function onSubmit({ data }: SubmitEvents<{ name: string }>) {
 </script>
 
 <template>
-  <Form :control="form.control" @submit="onSubmit">
+  <Form :control="form.control" style="display: flex; flex-direction: column; gap: 1rem;" @submit="onSubmit">
     <button type="submit">
       Submit
     </button>
-    <Controller :control="form.control" name="name">
+    <Controller :control="form.control" name="name" as="div">
       <template #default="{ field }">
+        <label for="name">Name</label>
         <input :value="field.value" @input="field.onChange">
       </template>
     </Controller>
