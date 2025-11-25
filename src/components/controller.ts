@@ -1,20 +1,8 @@
-import type { SetupContext, Slot, SlotsType, VNode } from 'vue'
-import type { Control, FieldPath, FieldProps, FieldValues } from '../types'
+/* eslint-disable ts/no-redeclare */
+import type { ControllerProps, ControllerSlots, FieldPath, FieldValues } from '../types'
 import { defineComponent } from 'vue'
 import { useController } from '../composable/use-controller'
 
-export interface ControllerProps<
-  Values extends FieldValues,
-  Name extends FieldPath<Values> = FieldPath<Values>,
-  TransformedValues extends FieldValues = Values,
-> {
-  name: Name
-  control: Control<Values, any, TransformedValues>
-}
-
-export type ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> = SlotsType<{
-  default?: Slot<{ name: Name, field: FieldProps<Values, Name> }>
-}>
 /**
  * Component based on `useController` hook to work with controlled component.
  *
@@ -52,17 +40,25 @@ export type ControllerSlots<Values extends FieldValues, Name extends FieldPath<V
  * ```
  */
 
-export const Controller = defineComponent(
-  <
-    Values extends FieldValues,
-    Name extends FieldPath<Values> = FieldPath<Values>,
-    TransformedValues extends FieldValues = Values,
-  >(
-    props: ControllerProps<Values, Name, TransformedValues>,
-    context: SetupContext<unknown, ControllerSlots<Values, Name>>,
-  ) => {
-    const controller = useController(props)
-    return () => context.slots.default?.({ name: props.name, field: controller.field })
-  },
+export type Controller = new<
+  Values extends FieldValues,
+  Name extends FieldPath<Values> = FieldPath<Values>,
+  TransformedValues extends FieldValues = Values,
+>(props: ControllerProps<Values, Name, TransformedValues>) => {
+  $props: ControllerProps<Values, Name, TransformedValues>
+  $slots: ControllerSlots<Values, Name>
+}
 
-)
+const ControllerComponent = defineComponent({
+  props: ['control', 'name'],
+  setup(props: ControllerProps<any, any, any>, { slots }: { slots: ControllerSlots<any, any> }) {
+    const controller = useController(props)
+    return () => slots.default?.({
+      field: controller.field,
+      state: controller.state,
+      name: props.name,
+    })
+  },
+})
+
+export const Controller = ControllerComponent as unknown as Controller

@@ -45,7 +45,7 @@ export interface UseFormProps<
   delayError?: number
 }
 
-export interface UseFormInstance<
+export interface UseFormReturn<
   Values extends FieldValues = FieldValues,
   Context = any,
   TransformedValues extends FieldValues = FieldValues,

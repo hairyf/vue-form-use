@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useForm } from 'pkg-placeholder'
+import { Controller, useForm } from 'pkg-placeholder'
 
 const form = useForm({
   defaultValues: {
@@ -7,16 +7,22 @@ const form = useForm({
   },
 })
 
-function onSubmit(data: any) {
+const onSubmit = form.handleSubmit((data) => {
+  // eslint-disable-next-line no-console
   console.log(data)
-}
+})
 </script>
 
 <template>
-  <form @submit="form.handleSubmit(onSubmit)($event)">
+  <form @submit="onSubmit($event)">
     <button type="submit">
       Submit
     </button>
+    <Controller :control="form.control" name="name">
+      <template #default="{ field }">
+        <input :value="field.value" @input="field.onChange">
+      </template>
+    </Controller>
   </form>
 </template>
 

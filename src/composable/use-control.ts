@@ -146,6 +146,7 @@ export function useControl<
 
   function register(name: FieldPath<Values>, options?: RegisterOptions): any {
     const cachedField = get(fields, name)
+
     if (cachedField)
       return cachedField._p
 

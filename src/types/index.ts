@@ -1,4 +1,5 @@
 export * from './actions'
+export * from './component'
 export * from './control'
 export * from './controller'
 export * from './default-values'

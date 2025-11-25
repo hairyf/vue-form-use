@@ -1,8 +1,8 @@
 import type {
   FieldValues,
   InternalFieldName,
-  UseFormInstance,
   UseFormProps,
+  UseFormReturn,
 } from '../types'
 import { reactive, ref } from 'vue'
 import { deepClone } from '../utils'
@@ -39,7 +39,7 @@ export function useForm<
   Values extends FieldValues,
   Context = any,
   TransformedValues extends FieldValues = Values,
->(props: UseFormProps<Values, Context, TransformedValues>): UseFormInstance<Values, Context, TransformedValues> {
+>(props: UseFormProps<Values, Context, TransformedValues>): UseFormReturn<Values, Context, TransformedValues> {
   props = {
     ...props,
     mode: props.mode || 'onSubmit',
@@ -56,7 +56,7 @@ export function useForm<
 
   control._resetDefaultValues()
 
-  const form: UseFormInstance<Values, Context, TransformedValues> = {
+  const form: UseFormReturn<Values, Context, TransformedValues> = {
     values: values as Values,
     state,
     control,
@@ -72,5 +72,5 @@ export function useForm<
     unregister: control.unregister,
   }
 
-  return reactive(form) as UseFormInstance<Values, Context, TransformedValues>
+  return reactive(form) as UseFormReturn<Values, Context, TransformedValues>
 }

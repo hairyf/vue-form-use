@@ -1,3 +1,4 @@
+import type { VNodeChild } from 'vue'
 import type { Control } from './control'
 import type { ChangeHandler } from './fields'
 import type { FieldPath, FieldPathValue } from './path'
@@ -13,6 +14,7 @@ export interface FieldProps<
   onChange: ChangeHandler
   onBlur: ChangeHandler
   disabled?: boolean
+  // ref:
 }
 
 export interface UseControllerProps<
@@ -27,10 +29,23 @@ export interface UseControllerProps<
   disabled?: boolean
 }
 
-export interface UseControllerInstance<
+export interface UseControllerReturn<
   Values extends FieldValues = FieldValues,
   Name extends FieldPath<Values> = FieldPath<Values>,
 > {
   state: State<Values>
   field: FieldProps<Values, Name>
+}
+
+export interface ControllerProps<
+  Values extends FieldValues,
+  Name extends FieldPath<Values> = FieldPath<Values>,
+  TransformedValues extends FieldValues = Values,
+> {
+  name: Name
+  control: Control<Values, any, TransformedValues>
+}
+
+export interface ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> {
+  default?: (props: { name: Name, field: FieldProps<Values, Name>, state: State<Values> }) => VNodeChild
 }
