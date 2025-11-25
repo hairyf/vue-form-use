@@ -1,5 +1,6 @@
 export * from './deep-clone'
 export * from './deep-map'
+export * from './flatten'
 export * from './get'
 export * from './is'
 export * from './resolve'

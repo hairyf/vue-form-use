@@ -1,7 +1,21 @@
 /* eslint-disable ts/no-redeclare */
-import type { ControllerProps, ControllerSlots, FieldPath, FieldValues } from '../types'
+import type { Slot } from 'vue'
+import type { Control, FieldPath, FieldProps, FieldValues, State } from '../types'
 import { defineComponent } from 'vue'
 import { useController } from '../composable/use-controller'
+
+export interface ControllerProps<
+  Values extends FieldValues,
+  Name extends FieldPath<Values> = FieldPath<Values>,
+  TransformedValues extends FieldValues = Values,
+> {
+  name: Name
+  control: Control<Values, any, TransformedValues>
+}
+
+export interface ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> {
+  default?: Slot<{ name: Name, field: FieldProps<Values, Name>, state: State<Values> }>
+}
 
 /**
  * Component based on `useController` hook to work with controlled component.

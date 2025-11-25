@@ -1,4 +1,5 @@
 export * from './components/controller'
+export * from './components/form'
 export * from './composable/use-control'
 export * from './composable/use-controller'
 export * from './composable/use-form'

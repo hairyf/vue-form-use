@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Controller, useForm } from 'pkg-placeholder'
+import type { SubmitEvents } from 'pkg-placeholder'
+import { Controller, Form, useForm } from 'pkg-placeholder'
 
 const form = useForm({
   defaultValues: {
@@ -7,14 +8,14 @@ const form = useForm({
   },
 })
 
-const onSubmit = form.handleSubmit((data) => {
+async function onSubmit({ data }: SubmitEvents<{ name: string }>) {
   // eslint-disable-next-line no-console
   console.log(data)
-})
+}
 </script>
 
 <template>
-  <form @submit="onSubmit($event)">
+  <Form :control="form.control" @submit="onSubmit">
     <button type="submit">
       Submit
     </button>
@@ -23,7 +24,7 @@ const onSubmit = form.handleSubmit((data) => {
         <input :value="field.value" @input="field.onChange">
       </template>
     </Controller>
-  </form>
+  </Form>
 </template>
 
 <style scoped>
