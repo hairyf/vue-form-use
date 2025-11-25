@@ -28,8 +28,8 @@ import type {
 import { reactiveComputed } from '@vueuse/core'
 import { computed, reactive, ref } from 'vue'
 import { ELEMENT_EVENT_MAP, ELEMENT_VALUE_MAP } from '../constants'
-import { resolveFlattenFields } from '../logic'
-import { deepClone, get, isBrowser, isElement, resolve, set, toArray, unset } from '../utils'
+import { getRuleValue, resolveFlattenFields, validateField } from '../logic'
+import { deepClone, get, isAsyncFunction, isBrowser, isElement, resolve, set, toArray, unset } from '../utils'
 import { useDefaultValues } from './use-default-values'
 
 export function useControl<
@@ -98,6 +98,16 @@ export function useControl<
     _updateStateErrors(errors)
   }
 
+  function _focusError(): void {
+    if (!props.shouldFocusError)
+      return
+    for (const name of names) {
+      if (!get(state.form.errors, name))
+        continue
+      focus(name as FieldPath<Values>)
+    }
+  }
+
   async function onChange(event: any): Promise<void> {
     const nextValue = event?.target?.value ?? event?.target?.checked ?? event
     const fieldName = event?.name ?? event?.target?.name
@@ -115,25 +125,19 @@ export function useControl<
 
   async function trigger(name?: FieldPath<Values> | FieldPath<Values>[], options?: TriggerConfig): Promise<boolean> {
     const names = _mergeNames(name)
-    if (!props.resolver)
-      return true
 
-    await _executeSchemaAndUpdateState(names)
+    if (props.resolver) {
+      await _executeSchemaAndUpdateState(names)
+    }
+    else {
+      await executeBuiltInValidation(names)
+      _updateStateErrors(state.form.errors)
+    }
 
     if (options?.shouldFocus)
       _focusError()
 
     return state.form.isValid
-  }
-
-  function _focusError(): void {
-    if (!props.shouldFocusError)
-      return
-    for (const name of names) {
-      if (!get(state.form.errors, name))
-        continue
-      focus(name as FieldPath<Values>)
-    }
   }
 
   function focus(name: FieldPath<Values>, options?: FocusOptions): void {
@@ -155,23 +159,29 @@ export function useControl<
       name,
       mount: false,
       refs: {},
+      ...options,
     })
     const $props = {
+      disabled: options?.disabled || props.disabled,
+      ...(props.progressive
+        ? {
+            required: !!options?.required,
+            min: getRuleValue(options?.min),
+            max: getRuleValue(options?.max),
+            minLength: getRuleValue<number>(options?.minLength) as number,
+            maxLength: getRuleValue(options?.maxLength) as number,
+            pattern: getRuleValue(options?.pattern) as string,
+          }
+        : {}),
+      name,
+      value: computed(() => get(values.value, name)),
+      onChange: (event: any) => onChange(Object.assign(event, { name })),
+      onBlur: (event: any) => onChange(Object.assign(event, { name })),
       ref: (ref: any, refs: any) => {
         _f.ref = ref
         _f.refs = refs
         _f.mount = true
       },
-      value: computed(() => get(values.value, name)),
-      onChange: (event: any) => onChange(Object.assign(event, { name })),
-      onBlur: (event: any) => onChange(Object.assign(event, { name })),
-      disabled: options?.disabled,
-      max: options?.max,
-      maxLength: options?.maxLength,
-      min: options?.min,
-      minLength: options?.minLength,
-      pattern: options?.pattern,
-      required: options?.required,
     }
 
     const _p = reactiveComputed(() => {
@@ -335,11 +345,24 @@ export function useControl<
         e.preventDefault?.()
         e.persist?.()
       }
+
+      let fieldValues
+
       state.form.isSubmitting = true
 
-      const { values, errors } = await _runSchema()
+      if (props.resolver) {
+        const { values, errors } = await _runSchema()
+        _updateStateErrors(errors)
+        fieldValues = values
+      }
+      else {
+        await executeBuiltInValidation()
+        _updateStateErrors(state.form.errors)
+        fieldValues = values.value
+      }
 
-      _updateStateErrors(errors)
+      fieldValues = deepClone(fieldValues)
+
       // TODO: Disable fields
       // if (names.disabled.size) {
       //   for (const name of names.disabled) {
@@ -351,7 +374,7 @@ export function useControl<
 
       if (state.form.isValid) {
         try {
-          await onValid(values as unknown as TransformedValues, e)
+          await onValid(fieldValues as unknown as TransformedValues, e)
         }
         catch (error) {
           onValidError = error
@@ -372,6 +395,43 @@ export function useControl<
       if (onValidError)
         throw onValidError
     }
+  }
+
+  async function executeBuiltInValidation(names: FieldPath<Values>[] = _mergeNames(), shouldOnlyCheckValid?: boolean): Promise<boolean> {
+    const context = { valid: true }
+
+    for (const name of names) {
+      const field = get(fields, name)
+      if (!field?._f)
+        continue
+
+      if (field?._f.deps)
+        await trigger(field?._f.deps)
+
+      const isPromiseFunction = isAsyncFunction(field?._f.validate) || Object.values(field?._f.validate || {}).some(isAsyncFunction)
+      if (isPromiseFunction)
+        set(state.fields, `${name}.isValidating`, true)
+
+      const fieldError = await validateField(
+        field,
+        field._p.disabled,
+        values.value,
+        props.criteriaMode === 'all',
+        props.shouldUseNativeValidation && !shouldOnlyCheckValid,
+      )
+
+      if (isPromiseFunction)
+        set(state.fields, `${name}.isValidating`, false)
+
+      if (fieldError[name]) {
+        context.valid = false
+        if (shouldOnlyCheckValid)
+          break
+      }
+
+      set(state.fields, `${name}.error`, fieldError[name])
+    }
+    return context.valid
   }
 
   const control = {

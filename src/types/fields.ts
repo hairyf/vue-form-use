@@ -2,6 +2,7 @@ import type { ComponentPublicInstance } from 'vue'
 import type { FieldPath, FieldPathValue } from './path'
 import type { FieldValues } from './struct'
 import type { DeepMap, IsFlatObject, Noop } from './utils'
+import type { RegisterOptions } from './validator'
 
 export type InternalFieldName = string
 export type FieldName<Values extends FieldValues> = IsFlatObject<Values> extends true ? Extract<keyof Values, string> : string
@@ -40,14 +41,14 @@ export interface FieldElementProps<Values extends FieldValues, FieldName extends
 
 export interface FieldRef<Values extends FieldValues, FieldName extends FieldPath<Values>> {
   ref?: FieldElement<Values>
-  name: FieldName
   refs?: Record<string, any>
+  name: FieldName
   mount?: boolean
 }
 
 export interface Field<Values extends FieldValues, FieldName extends FieldPath<Values>> {
   _p: FieldElementProps<Values, FieldName>
-  _f: FieldRef<Values, FieldName>
+  _f: FieldRef<Values, FieldName> & RegisterOptions
 }
 
 export type Fields<Values extends FieldValues> = DeepMap<Values, Field<Values, FieldPath<Values>>>

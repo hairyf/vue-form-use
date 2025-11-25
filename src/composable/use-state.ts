@@ -50,21 +50,22 @@ export function useState<
       validatingFields: computed((): FormState['validatingFields'] => {
         return deepMap(state.fields, field => Reflect.get(field || {}, 'isValidating'))
       }),
-      errors: computed((): FieldErrors<Values> => {
-        return reactive({
-          root,
-          ...deepMap(state.fields, field => computed({
-            set: (value: FieldError) => Reflect.set(field, 'error', value),
-            get: () => Reflect.get(field || {}, 'error'),
-          })),
-        }) as FieldErrors<Values>
-      }),
+      errors: computed<FieldErrors<Values>>((): any => state.errors),
       disabled: props.disabled || false,
       isReady: false,
       defaultValues: isFunction(props.defaultValues)
         ? undefined
         : props.defaultValues,
     },
+    errors: computed((): FieldErrors<Values> => {
+      return reactive({
+        root,
+        ...deepMap(state.fields, field => computed({
+          set: (value: FieldError) => Reflect.set(field, 'error', value),
+          get: () => Reflect.get(field || {}, 'error'),
+        })),
+      }) as FieldErrors<Values>
+    }),
   })
 
   const resolvedValues = { ...props.defaultValues, ...props.values }

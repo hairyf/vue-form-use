@@ -5,6 +5,7 @@ import type { FieldElementProps } from './fields'
 import type { FieldPath, FieldPathValue } from './path'
 import type { KeepStateOptions, ResetAction } from './reset'
 import type { FieldValues } from './struct'
+import type { RegisterOptions } from './validator'
 
 /**
  * Set an error for the field. When set an error which is not associated to a field then manual `clearErrors` invoke is required.
@@ -242,7 +243,7 @@ export interface Unregister<Values extends FieldValues> {
 }
 
 export interface Register<Values extends FieldValues> {
-  <FieldName extends FieldPath<Values> = FieldPath<Values>>(name: FieldName): FieldElementProps<Values, FieldName>
+  <FieldName extends FieldPath<Values> = FieldPath<Values>>(name: FieldName, options?: RegisterOptions<Values, FieldName>): FieldElementProps<Values, FieldName>
 }
 
 export type FocusOptions = Partial<{

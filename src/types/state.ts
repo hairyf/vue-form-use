@@ -75,4 +75,4 @@ export interface FieldState {
  * state.name.invalid
  * ```
  */
-export interface State<Values extends FieldValues> { form: FormState<Values>, fields: DeepMap<Values, FieldState> }
+export interface State<Values extends FieldValues> { form: FormState<Values>, fields: DeepMap<Values, FieldState>, errors: FieldErrors<Values> }
