@@ -1,5 +1,5 @@
 import type { Field, FieldValues, InternalFieldName } from '../types'
-import type { FieldPath } from '../types/path'
+import type { FieldPath } from '../types/path/eager'
 
 export type FlattenFields<Values extends FieldValues> = Record<InternalFieldName, Field<Values, FieldPath<Values>>>
 export function resolveFlattenFields<Values extends FieldValues>(

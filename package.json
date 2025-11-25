@@ -14,13 +14,6 @@
   "bugs": "https://github.com/hairyf/vue-form-use/issues",
   "keywords": [],
   "sideEffects": false,
-  "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json"
-  },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
   "publishConfig": {
     "exports": {
       ".": "./dist/index.mjs",
@@ -28,7 +21,20 @@
     },
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
-    "types": "./dist/index.d.mts"
+    "types": "./dist/index.d.mts",
+    "publishConfig": {
+      "exports": {
+        ".": "./dist/index.mjs",
+        "./package.json": "./package.json"
+      },
+      "main": "./dist/index.mjs",
+      "module": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

@@ -28,8 +28,8 @@ import type {
 import { reactiveComputed } from '@vueuse/core'
 import { computed, reactive, ref } from 'vue'
 import { ELEMENT_EVENT_MAP, ELEMENT_VALUE_MAP } from '../constants'
-import { deepClone, get, isBrowser, isElement, resolve, resolveFlattenFields, set, toArray, unset } from '../utils'
-
+import { resolveFlattenFields } from '../logic'
+import { deepClone, get, isBrowser, isElement, resolve, set, toArray, unset } from '../utils'
 import { useDefaultValues } from './use-default-values'
 
 export function useControl<

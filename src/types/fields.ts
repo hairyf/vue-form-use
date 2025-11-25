@@ -24,7 +24,7 @@ export type NativeFieldValue = string | number | boolean | null | undefined | un
 export type FieldElement<Values extends FieldValues = FieldValues> = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | CustomElement<Values>
 
 export interface FieldElementProps<Values extends FieldValues, FieldName extends FieldPath<Values>> {
-  ref: (ref: Element | ComponentPublicInstance | null, refs: Record<string, any>) => void
+  ref: (ref: Element | ComponentPublicInstance | { controller?: true } | null, refs: Record<string, any>) => void
   value: FieldPathValue<Values, FieldName>
   onChange: ChangeHandler
   onBlur: ChangeHandler

@@ -1,6 +1,6 @@
+import type { FieldValues } from '../struct'
+import type { BrowserNativeObject, IsAny, IsEqual, Primitive } from '../utils'
 import type { ArrayKey, IsTuple, TupleKeys } from './common'
-import type { FieldValues } from './struct'
-import type { BrowserNativeObject, IsAny, IsEqual, Primitive } from './utils'
 /**
  * Helper function to break apart T1 and check if any are equal to T2
  *

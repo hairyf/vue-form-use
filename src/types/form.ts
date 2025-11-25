@@ -72,3 +72,11 @@ export interface UseFormReturn<
 
   focus: Focus<Values>
 }
+
+// exprot interface FormProps<
+//   Values extends FieldValues = FieldValues,
+//   Context = any,
+//   TransformedValues extends FieldValues = FieldValues,
+// > {
+//   control: Control<Values, Context, TransformedValues>
+// }

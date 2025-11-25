@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="Values extends FieldValues, Name extends FieldPath<Values>, TransformedValues extends FieldValues = Values">
 import type { Slot } from 'vue'
 import type { Control, FieldPath, FieldProps, FieldValues, State } from '../types'
-import { useController } from '../composable/use-controller'
+import { useController } from 'vue-form-use'
 
 const props = defineProps<{
   name: Name

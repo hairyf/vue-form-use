@@ -14,7 +14,7 @@ export function useController<
   // const registerProps = props.control.register(props.name, {...})
   const shouldUnregisterField = props.control.options.shouldUnregister || props.shouldUnregister
 
-  registerProps.ref({ controller: true })
+  registerProps.ref({ controller: true }, {})
 
   function onChange(event: any): void {
     registerProps.onChange({

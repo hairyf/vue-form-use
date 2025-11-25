@@ -49,7 +49,7 @@ export type Controller = new<
   $slots: ControllerSlots<Values, Name>
 }
 
-const ControllerComponent = defineComponent({
+const Component = defineComponent({
   props: ['control', 'name'],
   setup(props: ControllerProps<any, any, any>, { slots }: { slots: ControllerSlots<any, any> }) {
     const controller = useController(props)
@@ -61,4 +61,4 @@ const ControllerComponent = defineComponent({
   },
 })
 
-export const Controller = ControllerComponent as unknown as Controller
+export const Controller = Component as unknown as Controller
