@@ -42,7 +42,8 @@ export interface UseFormProps<
   shouldUseNativeValidation?: boolean
   progressive?: boolean
   criteriaMode?: CriteriaMode
-  delayError?: number
+  // TODO: delay error display
+  // delayError?: number
 }
 
 export interface UseFormReturn<

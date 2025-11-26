@@ -69,22 +69,22 @@ const schema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required'),
 })
 
-const { register, handleSubmit, errors } = useForm({
+const form = useForm({
   defaultValues: { name: '' },
   resolver: yupResolver(schema),
 })
 
-const onSubmit = handleSubmit((data) => {
+const onSubmit = form.handleSubmit((data) => {
   console.log(data)
 })
 </script>
 
 <template>
   <form @submit="onSubmit">
-    <input :="register('name')" placeholder="Name">
-    {{ errors.name?.message }}
-    <input :="register('email')" placeholder="Email">
-    {{ errors.email?.message }}
+    <input :="form.register('name')" placeholder="Name">
+    {{ form.errors.name?.message }}
+    <input :="form.register('email')" placeholder="Email">
+    {{ form.errors.email?.message }}
     <button type="submit">
       Submit
     </button>
@@ -235,13 +235,12 @@ function useForm(props: UseFormProps): UseFormReturn
 - `shouldUnregister` - Unregister fields on unmount (default: `false`)
 - `shouldUseNativeValidation` - Use native HTML5 validation
 - `criteriaMode` - Error criteria mode: `'firstError'` | `'all'`
-- `delayError` - Delay error display (milliseconds)
 
 #### Returns
 
-- `state` - Reactive form values (the actual form data)
-- `status` - Form state object containing:
-  - `form` - Form-level state (isDirty, isValid, isSubmitting, etc.)
+- `values` - Reactive form values (the actual form data)
+- `state` - Form state object containing:
+  - (isDirty, isValid, isSubmitting, etc.)
   - `fields` - Field-level state for each field (invalid, isDirty, isTouched, etc.)
 - `control` - Form control instance
 - `errors` - Field errors object
