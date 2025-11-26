@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "catalog:",
-    "vue3-use-form": "workspace:*"
+    "vue-form-use": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:types",

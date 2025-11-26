@@ -1,7 +1,7 @@
 <!-- eslint-disable no-console -->
 <!-- eslint-disable unused-imports/no-unused-vars -->
 <script setup lang="ts">
-import { useForm } from 'vue3-use-form'
+import { useForm } from 'vue-form-use'
 
 const form = useForm({
   defaultValues: {
