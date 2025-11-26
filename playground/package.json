@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "pkg-placeholder": "workspace:*",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "vue3-use-form": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:types",

@@ -1,13 +1,12 @@
 import type { Ref } from 'vue'
-import type { ClearError, Focus, HandleSubmit, Register, Reset, ResetField, SetError, Unregister, Update } from './actions'
 import type { DefaultValues } from './default-values'
 import type { FieldErrors } from './errors'
 import type { FieldName, Fields, InternalFieldName } from './fields'
 import type { UseFormProps } from './form'
+import type { ClearError, Focus, HandleSubmit, Register, Reset, ResetField, SetError, Trigger, Unregister, Update } from './operate'
 import type { FieldPath } from './path'
 import type { State } from './state'
 import type { FieldValues } from './struct'
-import type { Trigger } from './trigger'
 import type { Noop } from './utils'
 
 export type GetIsDirty = <Name extends InternalFieldName, Data>(name?: Name, data?: Data) => boolean

@@ -32,25 +32,27 @@ yarn add vue-form-use
 
 ```vue
 <script setup lang="ts">
-import { useForm } from 'vue-form-use'
+import { useForm } from 'pkg-placeholder'
 
-const { register, handleSubmit, errors } = useForm({
-  defaultValues: { name: '' }
+const form = useForm({
+  defaultValues: {
+    username: '',
+  },
 })
 
-const onSubmit = handleSubmit((data) => {
-  console.log(data)
+const onSubmit = form.handleSubmit((data) => {
+  console.log('🚀 Submit Data: ', data)
 })
 </script>
 
 <template>
-  <form @submit="onSubmit">
-    <input :="register('name', { required: true })" placeholder="Name">
-    {{ errors.name?.message }}
+  <form @submit.prevent="onSubmit">
+    <input :="form.register('username', { required: 'username field cannot be empty!' })">
     <button type="submit">
-      Submit
+      submit
     </button>
   </form>
+  <span>errors: {{ form.errors }}</span>
 </template>
 ```
 

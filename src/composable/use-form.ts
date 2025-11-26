@@ -53,9 +53,9 @@ export function useForm<
   control._resetDefaultValues()
 
   const form: UseFormReturn<Values, Context, TransformedValues> = {
-    values: values as Values,
+    state: values as Values,
     control,
-    state: control.state,
+    status: control.state,
     update: control.update,
     trigger: control.trigger,
     reset: control.reset,
@@ -66,6 +66,7 @@ export function useForm<
     clearError: control.clearError,
     register: control.register,
     unregister: control.unregister,
+    errors: control.state.form.errors,
   }
 
   return reactive(form) as UseFormReturn<Values, Context, TransformedValues>

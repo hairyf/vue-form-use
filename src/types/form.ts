@@ -1,3 +1,8 @@
+import type { Control } from './control'
+import type { AsyncDefaultValues, DefaultValues } from './default-values'
+
+import type { FieldErrors } from './errors'
+import type { CriteriaMode, Mode, RevalidateMode } from './mode'
 import type {
   ClearError,
   Focus,
@@ -6,19 +11,14 @@ import type {
   Reset,
   ResetField,
   SetError,
+  Trigger,
   Unregister,
   Update,
-} from './actions'
-import type { Control } from './control'
-
-import type { AsyncDefaultValues, DefaultValues } from './default-values'
-import type { FieldErrors } from './errors'
-import type { CriteriaMode, Mode, RevalidateMode } from './mode'
+} from './operate'
 import type { KeepStateOptions } from './reset'
 import type { Resolver } from './resolver'
 import type { State } from './state'
 import type { FieldValues } from './struct'
-import type { Trigger } from './trigger'
 
 export interface UseFormProps<
   Values extends FieldValues = FieldValues,
@@ -51,11 +51,11 @@ export interface UseFormReturn<
   TransformedValues extends FieldValues = FieldValues,
 > {
   control: Control<Values, Context, TransformedValues>
+  state: Values
 
   update: Update<Values>
-  values: Values
-
-  state: State<Values>
+  errors: FieldErrors<Values>
+  status: State<Values>
 
   trigger: Trigger<Values>
 

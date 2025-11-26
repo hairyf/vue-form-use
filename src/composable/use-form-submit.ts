@@ -1,4 +1,4 @@
-import type { SubmitErrorHandler, SubmitHandler, UseControlContext } from '../types'
+import type { HandleSubmit, SubmitErrorHandler, SubmitHandler, UseControlContext } from '../types'
 import { deepClone, unset } from '../utils'
 
 // eslint-disable-next-line ts/explicit-function-return-type
@@ -74,5 +74,5 @@ export function useFormSubmit(context: UseControlContext) {
     }
   }
 
-  return { handleSubmit }
+  return { handleSubmit: handleSubmit as HandleSubmit<any> }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "vue-form-use",
+  "name": "vue3-use-form",
   "type": "module",
   "version": "0.0.5",
   "packageManager": "pnpm@10.20.0",
@@ -17,7 +17,8 @@
   "publishConfig": {
     "exports": {
       ".": "./dist/index.mjs",
-      "./package.json": "./package.json"
+      "./package.json": "./package.json",
+      "./resolver/yup": "./dist/resolver/yup.mjs"
     },
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
@@ -25,7 +26,8 @@
     "publishConfig": {
       "exports": {
         ".": "./dist/index.mjs",
-        "./package.json": "./package.json"
+        "./package.json": "./package.json",
+        "./resolver/yup": "./dist/resolver/yup.mjs"
       },
       "main": "./dist/index.mjs",
       "module": "./dist/index.mjs",
@@ -34,7 +36,8 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./resolver/yup": "./src/resolver/yup.ts"
   },
   "files": [
     "dist"
@@ -74,7 +77,8 @@
     "vitest": "catalog:testing",
     "vitest-package-exports": "catalog:testing",
     "vue": "catalog:",
-    "yaml": "catalog:testing"
+    "yaml": "catalog:testing",
+    "yup": "catalog:"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"

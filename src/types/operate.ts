@@ -130,7 +130,7 @@ export interface UpdateOptions<Value> {
 export interface ResetField<Values extends FieldValues> {
   <FieldName extends FieldPath<Values> = FieldPath<Values>>(
     name: FieldName,
-    options?: UpdateOptions<FieldPathValue<Values, FieldName>>
+    options?: ResetFieldConfig<Values, FieldName>
   ): void
 }
 
@@ -208,7 +208,7 @@ export interface HandleSubmit<
   Values extends FieldValues,
   TransformedValues = Values,
 > {
-  (onValid: SubmitHandler<TransformedValues>, onInvalid?: SubmitErrorHandler<Values>): (event: any) => Promise<void>
+  (onValid?: SubmitHandler<TransformedValues>, onInvalid?: SubmitErrorHandler<Values>): (event: any) => Promise<void>
 }
 
 export interface UnregisterOptions extends Omit<KeepStateOptions, 'keepIsSubmitted' | 'keepSubmitCount' | 'keepValues' | 'keepDefaultValues' | 'keepErrors'> {
@@ -270,4 +270,27 @@ export interface Focus<Values extends FieldValues> {
     name: FieldPath<Values>,
     options?: FocusOptions
   ): void
+}
+
+export type TriggerConfig = Partial<{
+  shouldFocus: boolean
+}>
+/**
+ * Trigger field or form validation
+ *
+ * @remarks
+ * [API](TODO) • [Demo](TODO) • [Video](TODO)
+ *
+ * @param name - provide empty argument will trigger the entire form validation, an array of field names will validate an array of fields, and a single field name will only trigger that field's validation.
+ * @param options - should focus on the error field
+ *
+ * @returns validation result
+ *
+ * @example
+ * ```ts
+ * const result = await trigger(); // result will be a boolean value
+ * ```
+ */
+export interface Trigger<Values extends FieldValues> {
+  (name?: FieldPath<Values> | FieldPath<Values>[], options?: TriggerConfig): Promise<boolean>
 }

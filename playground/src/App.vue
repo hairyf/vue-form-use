@@ -1,44 +1,25 @@
+<!-- eslint-disable no-console -->
+<!-- eslint-disable unused-imports/no-unused-vars -->
 <script setup lang="ts">
-import { useForm } from 'pkg-placeholder'
+import { useForm } from 'vue3-use-form'
 
 const form = useForm({
   defaultValues: {
-    name: '',
+    username: '',
   },
-
 })
 
 const onSubmit = form.handleSubmit((data) => {
-  // eslint-disable-next-line no-console
-  console.log(data)
+  console.log('🚀 Submit Data: ', data)
 })
 </script>
 
 <template>
-  <form style="display: flex; flex-direction: column; gap: 12px;" @submit="onSubmit">
-    <input :="form.register('name', { required: { value: true, message: 'Name is required' } })">
-    <p v-if="form.state.errors.name">
-      {{ form.state.errors.name.message }}
-    </p>
+  <form @submit.prevent="onSubmit">
+    <input :="form.register('username', { required: 'username field cannot be empty!' })">
     <button type="submit">
-      Submit
+      submit
     </button>
   </form>
+  <span>errors: {{ form.errors }}</span>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
