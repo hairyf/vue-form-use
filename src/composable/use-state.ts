@@ -1,4 +1,4 @@
-import type { FieldError, FieldErrors, FieldState, FieldValues, FormState, InternalFieldName, State, UseFormProps } from '../types'
+import type { FieldError, FieldErrors, FieldState, FieldValues, FormState, Names, State, UseFormProps } from '../types'
 import { computed, reactive, ref } from 'vue'
 import { deepMap, get, isFunction } from '../utils'
 
@@ -8,7 +8,7 @@ export function useState<
   TransformedValues extends FieldValues = Values,
 >(
   props: UseFormProps<Values, Context, TransformedValues>,
-  names: Set<InternalFieldName>,
+  names: Names,
 ): State<Values> {
   const root = ref({})
   const state = reactive({
@@ -21,21 +21,21 @@ export function useState<
       submitCount: 0,
 
       isValidating: computed(() => {
-        for (const name of names) {
+        for (const name of names.mount) {
           if (get(state.fields, `${name}.isValidating`))
             return true
         }
         return false
       }),
       isDirty: computed((): FormState['isDirty'] => {
-        for (const name of names) {
+        for (const name of names.mount) {
           if (get(state.fields, `${name}.isDirty`))
             return true
         }
         return false
       }),
       isValid: computed((): FormState['isValid'] => {
-        for (const name of names) {
+        for (const name of names.mount) {
           if (get(state.fields, `${name}.invalid`))
             return false
         }

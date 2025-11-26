@@ -1,15 +1,31 @@
 import type { Ref } from 'vue'
-import type { DefaultValues, FieldValues } from '../types'
+import type { DefaultValues, UseControlContext } from '../types'
+import { extendRef } from '@vueuse/shared'
 import { computed, ref } from 'vue'
-import { deepClone } from '../utils'
+import { deepClone, resolve } from '../utils'
 
-export function useDefaultValues<Values extends FieldValues>(values: Ref<Values>): Ref<DefaultValues<Values>> {
-  const source = ref({} as unknown as DefaultValues<Values>)
-  return computed({
+// eslint-disable-next-line ts/explicit-function-return-type
+export function useDefaultValues(context: UseControlContext) {
+  const source = ref<any>({}) as Ref<DefaultValues<any>>
+  const values = context.values!
+  const state = context.state!
+  const props = context.options!
+
+  const computedDefaultValues = computed({
     get: () => source.value,
-    set: (value: DefaultValues<Values>) => {
+    set: (value: DefaultValues<any>) => {
       source.value = value
-      values.value = deepClone(value) as Values
+      values.value = deepClone(value)
     },
   })
+
+  function reset(): void {
+    resolve(props.defaultValues, {
+      onPromiseStart: () => state.form.isLoading = true,
+      onPromiseEnded: () => state.form.isLoading = false,
+      onResolved: result => source.value = result,
+    })
+  }
+
+  return extendRef(computedDefaultValues, { reset })
 }

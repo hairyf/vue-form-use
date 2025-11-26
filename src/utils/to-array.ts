@@ -1,5 +1,7 @@
-export function toArray<T>(value?: T | T[]): T[] | undefined {
+export function toArray<T>(value?: T | T[] | Set<T>): T[] {
   if (!value)
-    return undefined
+    return []
+  if (value instanceof Set)
+    return Array.from(value)
   return Array.isArray(value) ? value : [value]
 }

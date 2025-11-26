@@ -1,13 +1,11 @@
 import type {
   FieldValues,
-  InternalFieldName,
   UseFormProps,
   UseFormReturn,
 } from '../types'
 import { reactive, ref } from 'vue'
 import { deepClone } from '../utils'
 import { useControl } from './use-control'
-import { useState } from './use-state'
 
 /**
  * Custom hook to manage the entire form.
@@ -48,18 +46,16 @@ export function useForm<
     shouldFocusError: props.shouldFocusError ?? true,
   }
 
-  const values = ref<Values>(deepClone(props.values) || {} as Values)
-  const names = reactive(new Set<InternalFieldName>())
-  const state = useState(props, names)
+  const values = ref<Values>(deepClone(props.values || {}) as unknown as Values)
 
-  const control = useControl(props, values, state, names)
+  const control = useControl(props, values)
 
   control._resetDefaultValues()
 
   const form: UseFormReturn<Values, Context, TransformedValues> = {
     values: values as Values,
-    state,
     control,
+    state: control.state,
     update: control.update,
     trigger: control.trigger,
     reset: control.reset,
