@@ -21,8 +21,8 @@ export function useDefaultValues(context: UseControlContext) {
 
   function reset(): void {
     resolve(props.defaultValues, {
-      onPromiseStart: () => state.form.isLoading = true,
-      onPromiseEnded: () => state.form.isLoading = false,
+      onPromiseStart: () => state.isLoading = true,
+      onPromiseEnded: () => state.isLoading = false,
       onResolved: result => source.value = result,
     })
   }

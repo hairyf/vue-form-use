@@ -25,7 +25,7 @@ export function useFormSubmit(context: UseControlContext) {
 
       let fieldValues
 
-      state.form.isSubmitting = true
+      state.isSubmitting = true
 
       if (props.resolver) {
         const { values, errors } = await _runSchema()
@@ -34,7 +34,7 @@ export function useFormSubmit(context: UseControlContext) {
       }
       else {
         await _executeBuiltInValidation()
-        _updateStateErrors(state.form.errors)
+        _updateStateErrors(state.errors)
         fieldValues = values.value
       }
 
@@ -47,9 +47,9 @@ export function useFormSubmit(context: UseControlContext) {
       //   }
       // }
 
-      unset(state.form.errors, 'root')
+      unset(state.errors, 'root')
 
-      if (state.form.isValid) {
+      if (state.isValid) {
         try {
           await onValid(fieldValues, e)
         }
@@ -59,15 +59,15 @@ export function useFormSubmit(context: UseControlContext) {
       }
       else {
         if (onInvalid)
-          await onInvalid({ ...state.form.errors }, e)
+          await onInvalid({ ...state.errors }, e)
         _focusError()
         setTimeout(_focusError)
       }
 
-      state.form.isSubmitting = false
-      state.form.isSubmitted = true
-      state.form.isSubmitSuccessful = state.form.isValid
-      state.form.submitCount++
+      state.isSubmitting = false
+      state.isSubmitted = true
+      state.isSubmitSuccessful = state.isValid
+      state.submitCount++
 
       if (onValidError)
         throw onValidError

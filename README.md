@@ -100,21 +100,21 @@ For more complex scenarios or when you need fine-grained control, you can use th
 <script setup lang="ts">
 import { Controller, useForm } from 'vue-form-use'
 
-const { control, register, handleSubmit, errors } = useForm({
+const form = useForm({
   defaultValues: {
     name: '',
     email: '',
   },
 })
 
-const onSubmit = handleSubmit((data) => {
+const onSubmit = form.handleSubmit((data) => {
   console.log(data)
 })
 </script>
 
 <template>
   <form @submit="onSubmit">
-    <Controller :control="control" name="name">
+    <Controller :control="form.control" name="name">
       <template #default="{ field }">
         <input
           :value="field.value"
@@ -125,7 +125,7 @@ const onSubmit = handleSubmit((data) => {
       </template>
     </Controller>
 
-    <Controller :control="control" name="email">
+    <Controller :control="form.control" name="email">
       <template #default="{ field }">
         <input
           :value="field.value"
@@ -157,23 +157,28 @@ const form = useForm({
   },
 })
 
-const email2 = form.watch('email')
+// Access form values (reactive)
+const emailValue = computed(() => form.values.email)
 
 // Access form state
-const isDirty = computed(() => form.state.form.isDirty)
-const isValid = computed(() => form.state.form.isValid)
+const isDirty = computed(() => form.status.isDirty)
+const isValid = computed(() => form.status.isValid)
+const isSubmitting = computed(() => form.status.isSubmitting)
 </script>
 
 <template>
   <form>
     <input :="form.register('email')">
-    <p v-if="errors.email">
-      {{ errors.email.message }}
+    <p v-if="form.errors.email">
+      {{ form.errors.email.message }}
     </p>
     <!-- directly using field values, it has responsiveness -->
     {{ form.values.email }}
-    <!-- or use a computed watch property -->
-    {{ email2 }}
+    <!-- or use a computed property -->
+    {{ emailValue }}
+    <!-- access form status -->
+    <p>Is Dirty: {{ isDirty }}</p>
+    <p>Is Valid: {{ isValid }}</p>
   </form>
 </template>
 ```
@@ -217,19 +222,29 @@ The main composable for managing form state.
 function useForm(props: UseFormProps): UseFormReturn
 ```
 
-- `defaultValues` - Default values for the form
+- `defaultValues` - Default values for the form (can be async function)
 - `values` - Controlled form values
-- `mode` - Validation mode: `'onSubmit'` | `'onBlur'` | `'onChange'` | `'onTouched'` | `'all'`
-- `reValidateMode` - Re-validation mode: `'onChange'` | `'onBlur'` | `'onSubmit'`
+- `mode` - Validation mode: `'onSubmit'` | `'onBlur'` | `'onChange'` | `'onTouched'` | `'all'` (default: `'onSubmit'`)
+- `reValidateMode` - Re-validation mode: `'onChange'` | `'onBlur'` | `'onSubmit'` (default: `'onChange'`)
+- `disabled` - Disable the entire form
+- `errors` - External controlled errors
+- `resetOptions` - Options for reset behavior (keepDirtyValues, keepErrors, etc.)
+- `resolver` - Validation resolver function
+- `context` - Custom context object passed to resolver
 - `shouldFocusError` - Focus the first error field on submit (default: `true`)
 - `shouldUnregister` - Unregister fields on unmount (default: `false`)
-- `resolver` - Validation resolver function
+- `shouldUseNativeValidation` - Use native HTML5 validation
+- `criteriaMode` - Error criteria mode: `'firstError'` | `'all'`
+- `delayError` - Delay error display (milliseconds)
 
 #### Returns
 
-- `values` - Reactive form values
-- `state` - Form state (errors, validation status, etc.)
+- `state` - Reactive form values (the actual form data)
+- `status` - Form state object containing:
+  - `form` - Form-level state (isDirty, isValid, isSubmitting, etc.)
+  - `fields` - Field-level state for each field (invalid, isDirty, isTouched, etc.)
 - `control` - Form control instance
+- `errors` - Field errors object
 - `register` - Register a field
 - `unregister` - Unregister a field
 - `handleSubmit` - Handle form submission
@@ -290,6 +305,12 @@ const form = useForm<FormValues>({
 form.values.name // string
 form.values.email // string
 form.values.age // number
+
+// Access form status
+form.status.isDirty // boolean
+form.status.isValid // boolean
+form.status.fields.name.isDirty // boolean
+form.status.fields.name.error // FieldError | undefined
 ```
 
 ## License

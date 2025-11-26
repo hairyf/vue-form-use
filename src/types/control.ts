@@ -28,11 +28,6 @@ export type InternalRunSchema = (names: InternalFieldName[]) => Promise<{ errors
 export type InternalFocusError = () => boolean | undefined
 export type InternalDisableForm = (disabled?: boolean) => void
 export type InternalRemoveUnmounted = () => void
-export interface InternalState {
-  mount: boolean
-  action: boolean
-  watch: boolean
-}
 
 export interface Control<
   Values extends FieldValues = FieldValues,

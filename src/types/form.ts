@@ -51,11 +51,11 @@ export interface UseFormReturn<
   TransformedValues extends FieldValues = FieldValues,
 > {
   control: Control<Values, Context, TransformedValues>
-  state: Values
 
+  values: Values
   update: Update<Values>
   errors: FieldErrors<Values>
-  status: State<Values>
+  state: State<Values>
 
   trigger: Trigger<Values>
 

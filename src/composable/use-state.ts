@@ -13,50 +13,48 @@ export function useState<
   const root = ref({})
   const state = reactive({
     fields: {} as any,
-    form: {
-      isLoading: isFunction(props.defaultValues),
-      isSubmitted: false,
-      isSubmitting: false,
-      isSubmitSuccessful: false,
-      submitCount: 0,
 
-      isValidating: computed(() => {
-        for (const name of names.mount) {
-          if (get(state.fields, `${name}.isValidating`))
-            return true
-        }
-        return false
-      }),
-      isDirty: computed((): FormState['isDirty'] => {
-        for (const name of names.mount) {
-          if (get(state.fields, `${name}.isDirty`))
-            return true
-        }
-        return false
-      }),
-      isValid: computed((): FormState['isValid'] => {
-        for (const name of names.mount) {
-          if (get(state.fields, `${name}.invalid`))
-            return false
-        }
-        return true
-      }),
-      dirtyFields: computed((): FormState['dirtyFields'] => {
-        return deepMap(state.fields, field => Reflect.get(field || {}, 'isDirty'))
-      }),
-      touchedFields: computed((): FormState['touchedFields'] => {
-        return deepMap(state.fields, field => Reflect.get(field || {}, 'isTouched'))
-      }),
-      validatingFields: computed((): FormState['validatingFields'] => {
-        return deepMap(state.fields, field => Reflect.get(field || {}, 'isValidating'))
-      }),
-      errors: computed<FieldErrors<Values>>((): any => state.errors),
-      disabled: props.disabled || false,
-      isReady: false,
-      defaultValues: isFunction(props.defaultValues)
-        ? undefined
-        : props.defaultValues,
-    },
+    isLoading: isFunction(props.defaultValues),
+    isSubmitted: false,
+    isSubmitting: false,
+    isSubmitSuccessful: false,
+    submitCount: 0,
+
+    isValidating: computed(() => {
+      for (const name of names.mount) {
+        if (get(state.fields, `${name}.isValidating`))
+          return true
+      }
+      return false
+    }),
+    isDirty: computed((): FormState['isDirty'] => {
+      for (const name of names.mount) {
+        if (get(state.fields, `${name}.isDirty`))
+          return true
+      }
+      return false
+    }),
+    isValid: computed((): FormState['isValid'] => {
+      for (const name of names.mount) {
+        if (get(state.fields, `${name}.invalid`))
+          return false
+      }
+      return true
+    }),
+    dirtyFields: computed((): FormState['dirtyFields'] => {
+      return deepMap(state.fields, field => Reflect.get(field || {}, 'isDirty'))
+    }),
+    touchedFields: computed((): FormState['touchedFields'] => {
+      return deepMap(state.fields, field => Reflect.get(field || {}, 'isTouched'))
+    }),
+    validatingFields: computed((): FormState['validatingFields'] => {
+      return deepMap(state.fields, field => Reflect.get(field || {}, 'isValidating'))
+    }),
+    disabled: props.disabled || false,
+    isReady: false,
+    defaultValues: isFunction(props.defaultValues)
+      ? undefined
+      : props.defaultValues,
     errors: computed((): FieldErrors<Values> => {
       return reactive({
         root,

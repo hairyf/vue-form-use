@@ -43,7 +43,7 @@ export function useFormOperate(context: UseControlContext) {
     if (!options?.keepValues) {
       if (options?.keepDirtyValues) {
         for (const name of names.mount) {
-          get(state.form.dirtyFields, name)
+          get(state.dirtyFields, name)
             ? set(nextValues, name, get(values.value, name))
             : set(values.value, name, get(nextValues, name))
         }
@@ -81,10 +81,10 @@ export function useFormOperate(context: UseControlContext) {
       })
     }
 
-    Object.assign(state.form, {
-      isSubmitted: options?.keepIsSubmitted ? state.form.isSubmitted : false,
-      isSubmitSuccessful: options?.keepIsSubmitSuccessful ? state.form.isSubmitSuccessful : false,
-      submitCount: options?.keepSubmitCount ? state.form.submitCount : 0,
+    Object.assign(state, {
+      isSubmitted: options?.keepIsSubmitted ? state.isSubmitted : false,
+      isSubmitSuccessful: options?.keepIsSubmitSuccessful ? state.isSubmitSuccessful : false,
+      submitCount: options?.keepSubmitCount ? state.submitCount : 0,
     })
   }
 
@@ -109,13 +109,13 @@ export function useFormOperate(context: UseControlContext) {
 
   function setError(name: FieldPath<any> | `root.${string}` | 'root', error: FieldError, options?: { shouldFocus?: boolean }): void {
     const ref = get(fields, name)?._f?.ref
-    set(state.form.errors, name, error)
+    set(state.errors, name, error)
     options?.shouldFocus && ref.focus?.()
   }
 
   function clearError(name?: FieldPath<any> | FieldPath<any>[] | `root.${string}` | 'root'): void {
     for (const name_ of toArray(name || names.mount))
-      unset(state.form.errors, name_)
+      unset(state.errors, name_)
   }
 
   return { focus, update, reset, resetField, setError, clearError }

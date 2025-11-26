@@ -92,20 +92,20 @@ export function useFormValidation(context: UseControlContext) {
     }
     else {
       await _executeBuiltInValidation(names)
-      _updateStateErrors(state.form.errors)
+      _updateStateErrors(state.errors)
     }
 
     if (options?.shouldFocus)
       _focusError()
 
-    return state.form.isValid
+    return state.isValid
   }
 
   function _focusError(): void {
     if (!props.shouldFocusError)
       return
     for (const name of context.names?.mount || []) {
-      if (!get(state.form.errors, name))
+      if (!get(state.errors, name))
         continue
       context.focus?.(name)
     }

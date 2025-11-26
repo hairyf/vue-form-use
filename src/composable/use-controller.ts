@@ -35,7 +35,7 @@ export function useController<
     })
   }
   const field = reactive({
-    disabled: computed(() => props.control.state.form.disabled || props.disabled),
+    disabled: computed(() => props.control.state.disabled || props.disabled),
     value: toRef(registerProps, 'value'),
     ref: registerProps.ref,
     name: props.name,

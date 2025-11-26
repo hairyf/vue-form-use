@@ -106,7 +106,7 @@ const Component = defineComponent({
         props.onError?.({ error })
       }
       if (hasError) {
-        props.control.state.form.isSubmitSuccessful = false
+        props.control.state.isSubmitSuccessful = false
         props.control.setError('root.server', { type })
       }
     }
