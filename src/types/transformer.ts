@@ -1,4 +1,4 @@
-export interface Transformer<V, R = any> {
-  input: (values: V) => R
-  output: (values: R) => V
+export interface Transformer<Parsed, Serialized = any> {
+  input: (value: Serialized) => Parsed
+  output: (value: Parsed) => Serialized
 }

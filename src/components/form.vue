@@ -54,7 +54,7 @@ async function onValidSubmit(event: SubmitEvent, data: any): Promise<void> {
     props.onError?.({ error })
   }
   if (hasError) {
-    props.control.state.form.isSubmitSuccessful = false
+    props.control.state.isSubmitSuccessful = false
     props.control.setError('root.server', { type })
   }
 }

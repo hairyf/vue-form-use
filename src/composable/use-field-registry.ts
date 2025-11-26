@@ -17,10 +17,10 @@ export function useFieldRegistry(context: UseControlContext) {
   const defaultValues = context.defaultValues!
 
   function register(name: FieldPath<any>, options?: RegisterOptions): any {
-    const cachedField = get(fields, name)
+    const cached = get(fields, name)
 
-    if (cachedField)
-      return cachedField._p
+    if (cached)
+      return cached._p
 
     const _f = reactive({
       ref: ref(),

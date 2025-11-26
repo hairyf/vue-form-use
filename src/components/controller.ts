@@ -1,17 +1,8 @@
 /* eslint-disable ts/no-redeclare */
 import type { Slot } from 'vue'
-import type { Control, FieldPath, FieldProps, FieldValues, State } from '../types'
+import type { ControllerProps, FieldPath, FieldProps, FieldValues, State } from '../types'
 import { defineComponent } from 'vue'
 import { useController } from '../composable/use-controller'
-
-export interface ControllerProps<
-  Values extends FieldValues,
-  Name extends FieldPath<Values> = FieldPath<Values>,
-  TransformedValues extends FieldValues = Values,
-> {
-  name: Name
-  control: Control<Values, any, TransformedValues>
-}
 
 export interface ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> {
   default?: Slot<{ name: Name, field: FieldProps<Values, Name>, state: State<Values> }>
@@ -64,7 +55,7 @@ export type Controller = new<
 }
 
 const Component = defineComponent({
-  props: ['control', 'name'],
+  props: ['control', 'name', 'transformer', 'disabled', 'defaultValue', 'shouldUnregister'],
   setup(props: ControllerProps<any, any, any>, { slots }: { slots: ControllerSlots<any, any> }) {
     const controller = useController(props)
     return () => slots.default?.({
