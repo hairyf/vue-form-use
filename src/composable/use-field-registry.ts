@@ -76,7 +76,7 @@ export function useFieldRegistry(context: UseControlContext) {
 
       return {
         'modelValue': $props.value,
-        'onUpdate:modelValue': $props.onChange,
+        'onUpdate:modelValue': (value: any) => onChange({ target: { value, name } }),
         'ref': $props.ref,
         'name': name,
         'onBlur': $props.onBlur,
