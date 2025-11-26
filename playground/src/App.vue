@@ -20,13 +20,9 @@ const onSubmit = form.handleSubmit((data) => {
     <Controller
       :control="form.control"
       :name="'username' as const"
-      :transformer="{
-        input: (value = []) => value.join(','),
-        output: (value) => value.split(','),
-      }"
-      #="{ field }"
+      #="{ field, state }"
     >
-      <input :value="field.value" @input="field.onChange" @blur="field.onBlur">
+      <input v-model="field.value">
       <span>errors: {{ form.errors }}</span>
     </Controller>
 

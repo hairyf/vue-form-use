@@ -1,12 +1,7 @@
 /* eslint-disable ts/no-redeclare */
-import type { Slot } from 'vue'
-import type { ControllerProps, FieldPath, FieldProps, FieldValues, State } from '../types'
+import type { ControllerProps, ControllerSlots, FieldPath, FieldValues } from '../types'
 import { defineComponent } from 'vue'
 import { useController } from '../composable/use-controller'
-
-export interface ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> {
-  default?: Slot<{ name: Name, field: FieldProps<Values, Name>, state: State<Values> }>
-}
 
 /**
  * Component based on `useController` hook to work with controlled component.
@@ -30,14 +25,10 @@ export interface ControllerSlots<Values extends FieldValues, Name extends FieldP
  *
  * <template>
  *   <form v-bind="control">
- *     <controller :control="control" name="test" #="{ field: { onChange, onBlur, value, ref }, state }">
- *       <input
- *         @change="onChange"
- *         @blur="onBlur"
- *         :value="value"
- *         ref="ref"
- *       />
- *       <p>{{ state.isSubmitted ? "submitted" : "" }}</p>
+ *     <controller :control="control" name="test" #="{ field, state }">
+ *       <input v-model="value" />
+ *       <p>{{ state.error?.message }}</p>
+ *       <p>{{ state.isValidating ? "Validating..." : "" }}</p>
  *       <p>{{ state.isTouched ? "touched" : "" }}</p>
  *     </controller>
  *   </form>

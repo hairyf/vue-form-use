@@ -18,18 +18,10 @@ export function useController<
 
   registerProps.ref({ controller: true }, {})
 
-  function input(value: any): any {
-    return props.transformer?.input(value) || value
-  }
-
-  function output(value: any): any {
-    return props.transformer?.output(value) || value
-  }
-
   function onChange(event: any): void {
     registerProps.onChange({
       target: {
-        value: output(getEventValue(event)),
+        value: getEventValue(event),
         name: props.name,
       },
       type: EVENTS.CHANGE,
@@ -39,7 +31,7 @@ export function useController<
   function onBlur(event: any): void {
     registerProps.onBlur({
       target: {
-        value: output(getEventValue(event)),
+        value: getEventValue(event),
         name: props.name,
       },
       type: EVENTS.BLUR,
@@ -48,7 +40,10 @@ export function useController<
 
   const field = reactive({
     disabled: computed(() => props.control.state.disabled || props.disabled),
-    value: computed(() => input(get(registerProps, 'value'))),
+    value: computed({
+      get: () => get(registerProps, 'value'),
+      set: (value: any) => onChange(value),
+    }),
     ref: registerProps.ref,
     name: props.name,
     onChange,
@@ -66,7 +61,7 @@ export function useController<
   }
 
   const controller = reactive({
-    state: props.control.state,
+    state: computed(() => get(props.control.fields, props.name)),
     field,
   })
 

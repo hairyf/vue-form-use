@@ -1,7 +1,8 @@
+import type { Slot } from 'vue'
 import type { Control } from './control'
 import type { ChangeHandler } from './fields'
 import type { FieldPath, FieldPathValue } from './path'
-import type { State } from './state'
+import type { FieldState } from './state'
 import type { FieldValues } from './struct'
 import type { Transformer } from './transformer'
 
@@ -14,7 +15,6 @@ export interface FieldProps<
   onChange: ChangeHandler
   onBlur: ChangeHandler
   disabled?: boolean
-  // ref:
 }
 
 export interface UseControllerProps<
@@ -40,6 +40,10 @@ export interface UseControllerReturn<
   Values extends FieldValues = FieldValues,
   Name extends FieldPath<Values> = FieldPath<Values>,
 > {
-  state: State<Values>
+  state: FieldState
   field: FieldProps<Values, Name>
+}
+
+export interface ControllerSlots<Values extends FieldValues, Name extends FieldPath<Values>> {
+  default?: Slot<{ name?: Name, field: FieldProps<Values, Name>, state: FieldState }>
 }

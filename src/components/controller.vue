@@ -1,13 +1,10 @@
 <script setup lang="ts" generic="Values extends FieldValues, Name extends FieldPath<Values>, TransformedValues extends FieldValues = Values">
-import type { Slot } from 'vue'
-import type { ControllerProps, FieldPath, FieldProps, FieldValues, State } from 'vue-form-use'
+import type { ControllerProps, ControllerSlots, FieldPath, FieldValues } from 'vue-form-use'
 import { useController } from 'vue-form-use'
 
 const props = defineProps<ControllerProps<Values, Name, TransformedValues>>()
 
-defineSlots<{
-  default: Slot<{ field: FieldProps<Values, Name>, state: State<Values> }>
-}>()
+defineSlots<ControllerSlots<Values, Name>>()
 
 const controller = useController(props)
 </script>

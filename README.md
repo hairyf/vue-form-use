@@ -114,26 +114,12 @@ const onSubmit = form.handleSubmit((data) => {
 
 <template>
   <form @submit="onSubmit">
-    <Controller :control="form.control" name="name">
-      <template #default="{ field }">
-        <input
-          :value="field.value"
-          placeholder="Name"
-          @input="field.onChange"
-          @blur="field.onBlur"
-        >
-      </template>
+    <Controller v-slots="{ field }" :control="form.control" name="name">
+      <input v-model="field.value" placeholder="Name">
     </Controller>
 
-    <Controller :control="form.control" name="email">
-      <template #default="{ field }">
-        <input
-          :value="field.value"
-          placeholder="Email"
-          @input="field.onChange"
-          @blur="field.onBlur"
-        >
-      </template>
+    <Controller v-slots="{ field }" :control="form.control" name="email">
+      <input v-model="field.value" placeholder="Email">
     </Controller>
 
     <button type="submit">
