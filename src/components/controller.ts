@@ -21,12 +21,15 @@ import { useController } from '../composable/use-controller'
  *       test: ""
  *     }
  *   });
+ *   const onSubmit = control.handleSubmit((data) => {
+ *     console.log(data);
+ *   });
  * </script>
  *
  * <template>
- *   <form v-bind="control">
+ *   <form @submit.prevent="onSubmit">
  *     <controller :control="control" name="test" #="{ field, state }">
- *       <input v-model="value" />
+ *       <input v-model="field.value" />
  *       <p>{{ state.error?.message }}</p>
  *       <p>{{ state.isValidating ? "Validating..." : "" }}</p>
  *       <p>{{ state.isTouched ? "touched" : "" }}</p>
