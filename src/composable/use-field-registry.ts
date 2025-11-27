@@ -4,7 +4,7 @@ import { reactiveComputed } from '@vueuse/shared'
 import { computed, reactive, ref } from 'vue'
 import { ELEMENT_EVENT_MAP, ELEMENT_VALUE_MAP } from '../constants'
 import { getRuleValue } from '../logic'
-import { get, isBrowser, set, unset } from '../utils'
+import { get, isBrowser, isObject, set, unset } from '../utils'
 
 // eslint-disable-next-line ts/explicit-function-return-type
 export function useFieldRegistry(context: UseControlContext) {
@@ -29,6 +29,14 @@ export function useFieldRegistry(context: UseControlContext) {
       refs: {},
       ...options,
     })
+
+    function resolveEvent(event: any): any {
+      if (isObject(event)) {
+        return Object.assign(event, { name })
+      }
+      return { name, target: { value: event } }
+    }
+
     const $props = {
       disabled: options?.disabled || props.disabled,
       ...(props.progressive
@@ -43,8 +51,10 @@ export function useFieldRegistry(context: UseControlContext) {
         : {}),
       name,
       value: computed(() => get(values.value, name)),
-      onChange: (event: any) => onChange(Object.assign(event, { name })),
-      onBlur: (event: any) => onChange(Object.assign(event, { name })),
+      onChange: (event: any) => onChange(resolveEvent(event)),
+      onBlur: (event: any) => {
+        onChange(resolveEvent(event))
+      },
       ref: (ref: any, refs: any) => {
         _f.ref = ref
         _f.refs = refs
@@ -79,7 +89,6 @@ export function useFieldRegistry(context: UseControlContext) {
         'onUpdate:modelValue': (value: any) => onChange({ target: { value, name } }),
         'ref': $props.ref,
         'name': name,
-        'onBlur': $props.onBlur,
       }
     })
 

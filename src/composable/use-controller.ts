@@ -61,7 +61,7 @@ export function useController<
   }
 
   const controller = reactive({
-    state: computed(() => get(props.control.fields, props.name)),
+    state: computed(() => get(props.control.state.fields, props.name) || {}),
     field,
   })
 

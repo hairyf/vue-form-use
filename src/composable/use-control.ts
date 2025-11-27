@@ -31,7 +31,7 @@ export function useControl<
   const context: UseControlContext = {
     fields: reactive({} as Fields<Values>),
     context: reactive<any>(props.context || {}),
-    names: useFieldNames(),
+    names,
     options: props as UseFormProps,
     values,
     state,

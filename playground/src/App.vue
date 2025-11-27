@@ -1,13 +1,15 @@
 <!-- eslint-disable no-console -->
 <!-- eslint-disable unused-imports/no-unused-vars -->
 <script setup lang="ts">
-import { Controller, useForm } from 'vue-form-use'
+import { useForm } from 'vue-form-use'
+import UInput from './components/u-input.vue'
 
 const form = useForm({
   defaultValues: {
     username: [] as string[],
     password: '',
   },
+
 })
 
 const onSubmit = form.handleSubmit((data) => {
@@ -17,18 +19,8 @@ const onSubmit = form.handleSubmit((data) => {
 
 <template>
   <form @submit.prevent="onSubmit">
-    <Controller
-      :control="form.control"
-      :name="'username' as const"
-      #="{ field, state }"
-    >
-      <input v-model="field.value">
-      <span>errors: {{ form.errors }}</span>
-    </Controller>
+    <UInput :="form.register('password')" />
 
-    <input :="form.register('password')">
-
-    {{ form.values.username }}
     {{ form.values.password }}
     <button type="submit">
       submit

@@ -1,3 +1,4 @@
+import type { AnyFn } from '@vueuse/shared'
 import type { ComponentPublicInstance } from 'vue'
 import type { FieldPath, FieldPathValue } from './path'
 import type { FieldValues } from './struct'
@@ -27,8 +28,9 @@ export type FieldElement<Values extends FieldValues = FieldValues> = HTMLInputEl
 export interface FieldElementProps<Values extends FieldValues, FieldName extends FieldPath<Values>> {
   ref: (ref: Element | ComponentPublicInstance | { controller?: true } | null, refs: Record<string, any>) => void
   value: FieldPathValue<Values, FieldName>
-  onChange: ChangeHandler
-  onBlur: ChangeHandler
+  modelValue: FieldPathValue<Values, FieldName>
+  onChange: AnyFn
+  onBlur: AnyFn
   name: FieldPath<Values>
   disabled: boolean
   max: number | undefined
@@ -37,6 +39,7 @@ export interface FieldElementProps<Values extends FieldValues, FieldName extends
   minLength: number | undefined
   pattern: string | undefined
   required: boolean | undefined
+
 }
 
 export interface FieldRef<Values extends FieldValues, FieldName extends FieldPath<Values>> {

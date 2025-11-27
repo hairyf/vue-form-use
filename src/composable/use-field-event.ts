@@ -9,7 +9,14 @@ export function useFieldEvent(context: UseControlContext) {
   const values = context.values!
 
   async function onChange(event: any): Promise<void> {
-    const nextValue = event?.target?.value ?? event?.target?.checked ?? event
+    let nextValue
+    if (event?.target) {
+      nextValue = event?.target?.value ?? event?.target?.checked
+    }
+    else {
+      nextValue = event
+    }
+
     const fieldName = event?.name ?? event?.target?.name
     const fieldState = get(state.fields, fieldName)
     const isBlurEvent = event?.type === 'blur' || event?.type === 'focusout'

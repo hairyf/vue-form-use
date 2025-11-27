@@ -38,16 +38,16 @@
     }
   },
   "exports": {
-    ".": "./dist/index.mjs",
-    "./resolver/joi": "./dist/resolver/joi.mjs",
-    "./resolver/superstruct": "./dist/resolver/superstruct.mjs",
-    "./resolver/yup": "./dist/resolver/yup.mjs",
-    "./resolver/zod": "./dist/resolver/zod.mjs",
+    ".": "./src/index.ts",
+    "./resolver/joi": "./src/resolver/joi.ts",
+    "./resolver/superstruct": "./src/resolver/superstruct.ts",
+    "./resolver/yup": "./src/resolver/yup.ts",
+    "./resolver/zod": "./src/resolver/zod.ts",
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.d.ts",
   "files": [
     "dist"
   ],

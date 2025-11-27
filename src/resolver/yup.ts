@@ -18,7 +18,7 @@ async function parseYupSchema<
   catch (errs: unknown) {
     const validationError = errs as ValidationError
     validationError.inner.forEach((err: ValidationError) => {
-      set(errors, err.path as FieldPath<Values>, err.message)
+      set(errors, err.path as FieldPath<Values>, err)
     })
   }
 
