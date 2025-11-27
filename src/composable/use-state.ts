@@ -1,6 +1,6 @@
 import type { FieldError, FieldErrors, FieldState, FieldValues, FormState, Names, State, UseFormProps } from '../types'
 import { computed, reactive, ref } from 'vue'
-import { deepMap, get, isFunction } from '../utils'
+import { deepMap, get, isFunction, set } from '../utils'
 
 export function useState<
   Values extends FieldValues,
@@ -56,12 +56,16 @@ export function useState<
       ? undefined
       : props.defaultValues,
     errors: computed((): FieldErrors<Values> => {
+      const errors: any = {}
+      for (const name of names.mount) {
+        set(errors, name, computed({
+          get: () => get(state.fields, `${name}.error`),
+          set: (value: FieldError) => set(state.fields, `${name}.error`, value),
+        }))
+      }
       return reactive({
         root,
-        ...deepMap(state.fields, field => computed({
-          set: (value: FieldError) => Reflect.set(field, 'error', value),
-          get: () => Reflect.get(field || {}, 'error'),
-        })),
+        ...errors,
       }) as FieldErrors<Values>
     }),
   })

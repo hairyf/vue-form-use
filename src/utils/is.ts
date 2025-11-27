@@ -24,7 +24,7 @@ export function isUndefined(value: any): value is undefined {
 }
 
 export function isElement(value: any): value is Element {
-  return value instanceof Element
+  return isBrowser() && value instanceof Element
 }
 
 export function isRegex(value: any): value is RegExp {
@@ -40,15 +40,15 @@ export function isString(value: any): value is string {
 }
 
 export function isRadioInput(value: any): value is HTMLInputElement {
-  return value instanceof HTMLInputElement && value.type === 'radio'
+  return isBrowser() && value instanceof HTMLInputElement && value.type === 'radio'
 }
 
 export function isCheckBoxInput(value: any): value is HTMLInputElement {
-  return value instanceof HTMLInputElement && value.type === 'checkbox'
+  return isBrowser() && value instanceof HTMLInputElement && value.type === 'checkbox'
 }
 
 export function isFileInput(value: any): value is HTMLInputElement {
-  return value instanceof HTMLInputElement && value.type === 'file'
+  return isBrowser() && value instanceof HTMLInputElement && value.type === 'file'
 }
 
 export function isNullOrUndefined(value: any): value is null | undefined {

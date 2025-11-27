@@ -11,7 +11,7 @@ export function useDefaultValues(context: UseControlContext) {
   const state = context.state!
   const props = context.options!
 
-  const computedDefaultValues = computed({
+  const defaultValues = computed({
     get: () => source.value,
     set: (value: DefaultValues<any>) => {
       source.value = value
@@ -23,9 +23,9 @@ export function useDefaultValues(context: UseControlContext) {
     resolve(props.defaultValues, {
       onPromiseStart: () => state.isLoading = true,
       onPromiseEnded: () => state.isLoading = false,
-      onResolved: result => source.value = result,
+      onResolved: result => defaultValues.value = result,
     })
   }
 
-  return extendRef(computedDefaultValues, { reset })
+  return extendRef(defaultValues, { reset })
 }

@@ -104,10 +104,11 @@ export function useFormValidation(context: UseControlContext) {
   function _focusError(): void {
     if (!props.shouldFocusError)
       return
-    for (const name of context.names?.mount || []) {
-      if (!get(state.errors, name))
-        continue
-      context.focus?.(name)
+    for (const name of (context.names?.mount || [])) {
+      if (get(state.fields, `${name}.error`)) {
+        context.focus?.(name)
+        break
+      }
     }
   }
 
