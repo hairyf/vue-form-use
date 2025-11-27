@@ -33,5 +33,5 @@ export interface Resolver<
     options: ResolverOptions<Values>
   ): Promise<
     ResolverResolved<Values, TransformedValues> | ResolverResolved<Values, TransformedValues>
-  >
+  > | (ResolverResolved<Values, TransformedValues> | ResolverResolved<Values, TransformedValues>)
 }

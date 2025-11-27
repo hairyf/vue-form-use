@@ -48,15 +48,17 @@ const onSubmit = form.handleSubmit((data) => {
 <template>
   <form @submit.prevent="onSubmit">
     <input :="form.register('username', { required: 'username field cannot be empty!' })">
+    <span v-if="form.errors.username">errors: {{ form.errors.username?.message }}</span>
     <button type="submit">
       submit
     </button>
   </form>
-  <span>errors: {{ form.errors }}</span>
 </template>
 ```
 
 ### Using Resolver Options
+
+We also support schema-based form validation with [Yup](https://github.com/jquense/yup), [Zod](https://github.com/vriad/zod) , [Superstruct](https://github.com/ianstormtaylor/superstruct) & [Joi](https://github.com/hapijs/joi), where you can pass your `schema` to `useForm` as an optional config. It will validate your input data against the schema and return with either `errors` or a valid result.
 
 ```vue
 <script setup lang="ts">
@@ -226,7 +228,7 @@ function useForm(props: UseFormProps): UseFormReturn
 
 - `values` - Reactive form values (the actual form data)
 - `state` - Form state object containing:
-  - (isDirty, isValid, isSubmitting, etc.)
+  - `isDirty`, `isValid`, `isSubmitting`, etc.
   - `fields` - Field-level state for each field (invalid, isDirty, isTouched, etc.)
 - `control` - Form control instance
 - `errors` - Field errors object

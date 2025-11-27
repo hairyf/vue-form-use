@@ -27,7 +27,10 @@
       "exports": {
         ".": "./dist/index.mjs",
         "./package.json": "./package.json",
-        "./resolver/yup": "./dist/resolver/yup.mjs"
+        "./resolver/yup": "./dist/resolver/yup.mjs",
+        "./resolver/joi": "./dist/resolver/joi.mjs",
+        "./resolver/zod": "./dist/resolver/zod.mjs",
+        "./resolver/superstruct": "./dist/resolver/superstruct.mjs"
       },
       "main": "./dist/index.mjs",
       "module": "./dist/index.mjs",
@@ -35,10 +38,16 @@
     }
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./package.json": "./package.json",
-    "./resolver/yup": "./src/resolver/yup.ts"
+    ".": "./dist/index.mjs",
+    "./resolver/joi": "./dist/resolver/joi.mjs",
+    "./resolver/superstruct": "./dist/resolver/superstruct.mjs",
+    "./resolver/yup": "./dist/resolver/yup.mjs",
+    "./resolver/zod": "./dist/resolver/zod.mjs",
+    "./package.json": "./package.json"
   },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
@@ -54,8 +63,11 @@
     "prepare": "simple-git-hooks"
   },
   "peerDependencies": {
+    "joi": "catalog:",
+    "superstruct": "catalog:",
     "vue": "catalog:",
-    "yup": "catalog:"
+    "yup": "catalog:",
+    "zod": "catalog:"
   },
   "dependencies": {
     "@vueuse/core": "catalog:",
@@ -78,8 +90,7 @@
     "vitest": "catalog:testing",
     "vitest-package-exports": "catalog:testing",
     "vue": "catalog:",
-    "yaml": "catalog:testing",
-    "yup": "catalog:"
+    "yaml": "catalog:testing"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
