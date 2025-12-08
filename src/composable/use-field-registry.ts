@@ -30,7 +30,7 @@ export function useFieldRegistry(context: UseControlContext) {
       ...options,
     })
 
-    function resolveEvent(event: any): any {
+    function getEventValue(event: any): any {
       if (isObject(event)) {
         return Object.assign(event, { name })
       }
@@ -51,10 +51,8 @@ export function useFieldRegistry(context: UseControlContext) {
         : {}),
       name,
       value: computed(() => get(values.value, name)),
-      onChange: (event: any) => onChange(resolveEvent(event)),
-      onBlur: (event: any) => {
-        onChange(resolveEvent(event))
-      },
+      onChange: (event: any) => onChange(getEventValue(event)),
+      onBlur: (event: any) => onChange(getEventValue(event)),
       ref: (ref: any, refs: any) => {
         _f.ref = ref
         _f.refs = refs
@@ -87,6 +85,8 @@ export function useFieldRegistry(context: UseControlContext) {
       return {
         'modelValue': $props.value,
         'onUpdate:modelValue': (value: any) => onChange({ target: { value, name } }),
+        'onChange': $props.onChange,
+        'onBlur': $props.onBlur,
         'ref': $props.ref,
         'name': name,
       }

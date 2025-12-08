@@ -62,8 +62,7 @@ describe('useController', () => {
     expect(form.values.username).toBe('newvalue')
   })
 
-  // TODO: reactiveComputed abnormal
-  it.skip('should handle onBlur event', async () => {
+  it('should handle onBlur event', async () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -79,7 +78,7 @@ describe('useController', () => {
     })
 
     controller.field.onBlur({ target: { value: '', name: 'username' } })
-    await nextTick()
+    await form.trigger('username')
 
     expect(form.state.fields.username.isTouched).toBe(true)
   })

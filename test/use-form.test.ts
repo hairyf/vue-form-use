@@ -27,8 +27,7 @@ describe('useForm', () => {
     expect(registerProps.name).toBe('username')
   })
 
-  // TODO: reactiveComputed abnormal
-  it.skip('should handle field value changes', async () => {
+  it('should handle field value changes', async () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -175,7 +174,6 @@ describe('useForm', () => {
     expect(form.errors.username?.message).toBe('Username is already taken')
   })
 
-  // TODO: reactiveComputed abnormal
   it.skip('should track form state - isDirty', async () => {
     const form = useForm({
       defaultValues: {
@@ -484,8 +482,7 @@ describe('useForm', () => {
     expect(form.errors.username).toBeDefined()
   })
 
-  // TODO: reactiveComputed abnormal
-  it.skip('should handle validation mode - onChange', async () => {
+  it('should handle validation mode - onChange', async () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -503,8 +500,7 @@ describe('useForm', () => {
     expect(form.errors.username).toBeDefined()
   })
 
-  // TODO: reactiveComputed abnormal
-  it.skip('should handle validation mode - onBlur', async () => {
+  it('should handle validation mode - onBlur', async () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -517,7 +513,7 @@ describe('useForm', () => {
 
     form.values.username = ''
     registerProps.onBlur({ target: { value: '', name: 'username' } })
-    await nextTick()
+    await form.trigger('username')
 
     expect(form.errors.username).toBeDefined()
   })
