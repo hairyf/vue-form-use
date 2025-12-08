@@ -85,7 +85,7 @@ export function useFormValidation(context: UseControlContext) {
   }
 
   async function trigger(name?: FieldPath<any> | FieldPath<any>[], options?: TriggerConfig): Promise<boolean> {
-    const names = toArray(name || context.names?.mount)
+    const names = toArray(name || context.names!.mount)
 
     if (props.resolver) {
       await _executeSchemaAndUpdateState(names)

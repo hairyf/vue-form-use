@@ -3,7 +3,7 @@ import type {
   UseFormProps,
   UseFormReturn,
 } from '../types'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { deepClone } from '../utils'
 import { useControl } from './use-control'
 
@@ -46,14 +46,20 @@ export function useForm<
     shouldFocusError: props.shouldFocusError ?? true,
   }
 
-  const values = ref<Values>(deepClone(props.values || {}) as unknown as Values)
+  const values = ref<Values>(deepClone({}) as unknown as Values)
 
   const control = useControl(props, values)
 
   control._resetDefaultValues()
 
-  const form: UseFormReturn<Values, Context, TransformedValues> = {
-    values: values as Values,
+  if (props.values) {
+    for (const name of Object.keys(props.values))
+      values.value[name] = props.values[name]
+  }
+
+  const form = {
+    values,
+    errors: computed(() => control.state.errors),
     control,
     state: control.state,
     update: control.update,
@@ -66,8 +72,7 @@ export function useForm<
     clearError: control.clearError,
     register: control.register,
     unregister: control.unregister,
-    errors: control.state.errors,
   }
 
-  return reactive(form) as UseFormReturn<Values, Context, TransformedValues>
+  return reactive(form) as unknown as UseFormReturn<Values, Context, TransformedValues>
 }

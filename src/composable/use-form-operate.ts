@@ -35,6 +35,7 @@ export function useFormOperate(context: UseControlContext) {
     options?: KeepStateOptions,
   ): void {
     const resolved = resolve(_values, { args: [values.value] })
+
     const nextValues = deepClone(resolved || defaultValues.value)
 
     if (!options?.keepDefaultValues)
@@ -89,8 +90,6 @@ export function useFormOperate(context: UseControlContext) {
   }
 
   function resetField(name: FieldPath<any>, options?: ResetFieldConfig<FieldPathValue<any, any>>): void {
-    if (!get(fields, name))
-      return
     if (options?.defaultValue) {
       set(values.value, name, options.defaultValue)
       set(defaultValues.value, name, options.defaultValue)

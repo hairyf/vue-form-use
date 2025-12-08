@@ -25,6 +25,7 @@ export function resolve<T>(value: T | AnyFn, options?: ResolveOptions<T>): T ext
   }
   else {
     options?.onResolved?.(value as T extends AnyFn ? Awaited<ReturnType<T>> : T)
+    result = value
   }
   return result
 }

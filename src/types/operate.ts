@@ -101,7 +101,7 @@ export interface Update<Values extends FieldValues> {
   <FieldName extends FieldPath<Values> = FieldPath<Values>>(
     name: FieldName,
     value: FieldPathValue<Values, FieldName>,
-    options?: { shouldDirty?: boolean }
+    options?: UpdateOptions<FieldPathValue<Values, FieldName>>
   ): void
 }
 

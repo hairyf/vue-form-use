@@ -39,7 +39,6 @@ export function useControl<
 
   const defaultValues = useDefaultValues(context)
   context.defaultValues = defaultValues
-
   const validation = useFormValidation(context)
   context.trigger = validation.trigger
   context._executeSchemaAndUpdateState = validation._executeSchemaAndUpdateState

@@ -115,7 +115,7 @@ export async function validateField<T extends FieldValues>(
 
     if (!isNullOrUndefined(inputValue) && !isNaN(inputValue as number)) {
       const valueNumber
-        = (ref as HTMLInputElement).valueAsNumber
+        = (ref as HTMLInputElement)?.valueAsNumber
           || (inputValue ? +inputValue : inputValue)
       if (!isNullOrUndefined(maxOutput.value)) {
         exceedMax = valueNumber > maxOutput.value

@@ -12,9 +12,12 @@ export function useController<
   props: UseControllerProps<Values, Name, TransformedValues>,
 ): UseControllerReturn<Values, Name> {
   const registerProps = props.control.register(props.name)
-  // TODO: rules
-  // const registerProps = props.control.register(props.name, {...})
   const shouldUnregisterField = props.control.options.shouldUnregister || props.shouldUnregister
+
+  if (props.defaultValue) {
+    set(props.control.defaultValues, props.name, props.defaultValue)
+    set(props.control._values, props.name, props.defaultValue)
+  }
 
   registerProps.ref({ controller: true }, {})
 
