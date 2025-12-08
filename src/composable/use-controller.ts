@@ -58,9 +58,7 @@ export function useController<
     set(props.control.defaultValues, props.name, value)
     if (isUndefined(get(props.control._values, props.name)))
       set(props.control._values, props.name, value)
-    onUnmounted(() => {
-      props.control.unregister(props.name)
-    })
+    onUnmounted(() => props.control.unregister(props.name))
   }
 
   const controller = reactive({

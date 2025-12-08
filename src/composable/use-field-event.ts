@@ -20,17 +20,14 @@ export function useFieldEvent(context: UseControlContext) {
     const fieldName = event?.name ?? event?.target?.name
     const fieldState = get(state.fields, fieldName)
 
-    // not found field, skip
-    if (!fieldState)
-      return
-
     const isBlurEvent = event?.type === 'blur' || event?.type === 'focusout'
 
-    const shouldRevalidate = fieldState.isTouched && props.reValidateMode === 'onChange'
+    const shouldRevalidate = fieldState?.isTouched && props.reValidateMode === 'onChange'
 
     const shouldTrigger = props.mode === 'onChange' || (props.mode === 'onBlur' && isBlurEvent) || shouldRevalidate
 
-    fieldState.isDirty = nextValue !== get(defaultValues.value, fieldName)
+    if (fieldState)
+      fieldState.isDirty = nextValue !== get(defaultValues.value, fieldName)
 
     set(values.value, fieldName, nextValue)
     shouldTrigger && context.trigger?.(fieldName)
