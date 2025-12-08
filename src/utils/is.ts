@@ -1,4 +1,5 @@
 import type { AnyFn } from '@vueuse/shared'
+import type { ComponentPublicInstance } from 'vue'
 
 export function isFunction(value: any): value is AnyFn {
   return typeof value === 'function'
@@ -61,4 +62,12 @@ export function isEmpty(value: any): boolean {
 
 export function isAsyncFunction(value: any): value is (...args: any[]) => Promise<any> {
   return isFunction(value) && value.constructor.name === 'AsyncFunction'
+}
+
+export function isComponentRef(value: any): value is ComponentPublicInstance {
+  return isObject(value) && '__v_skip' in value
+}
+
+export function isElementRef(value: any): value is Element {
+  return isBrowser() && isElement(value)
 }

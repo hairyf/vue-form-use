@@ -20,7 +20,9 @@
   isBoolean: function
   isBrowser: function
   isCheckBoxInput: function
+  isComponentRef: function
   isElement: function
+  isElementRef: function
   isEmpty: function
   isFileInput: function
   isFunction: function

@@ -44,6 +44,6 @@ describe('useFieldRegistry', () => {
 
     expect(props.name).toBe('username')
     expect(props.onBlur).toBeDefined()
-    expect(props['onUpdate:modelValue']).toBeDefined()
+    expect(props.onChange).toBeDefined()
   })
 })

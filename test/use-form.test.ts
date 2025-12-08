@@ -27,7 +27,7 @@ describe('useForm', () => {
     expect(registerProps.name).toBe('username')
   })
 
-  it('should handle field value changes', async () => {
+  it('should handle field value changes', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -37,7 +37,6 @@ describe('useForm', () => {
     const registerProps = form.register('username')
     registerProps.onChange({ target: { value: 'newvalue', name: 'username' } })
 
-    await nextTick()
     expect(form.values.username).toBe('newvalue')
   })
 
@@ -53,7 +52,6 @@ describe('useForm', () => {
     form.values.username = ''
 
     await form.trigger('username')
-    await nextTick()
 
     expect(form.errors.username).toBeDefined()
     expect(form.errors.username?.message).toBe('Username is required')
@@ -76,7 +74,6 @@ describe('useForm', () => {
 
     form.values.username = 'abc'
     await form.trigger('username')
-    await nextTick()
 
     expect(form.errors.username?.message).toBe('Username must be at least 5 characters')
   })
@@ -98,7 +95,6 @@ describe('useForm', () => {
 
     form.values.username = 'this is too long'
     await form.trigger('username')
-    await nextTick()
 
     expect(form.errors.username?.message).toBe('Username must be at most 10 characters')
   })
@@ -120,7 +116,6 @@ describe('useForm', () => {
 
     form.values.email = 'invalid-email'
     await form.trigger('email')
-    await nextTick()
 
     expect(form.errors.email?.message).toBe('Invalid email format')
   })
@@ -144,7 +139,6 @@ describe('useForm', () => {
 
     form.values.username = 'admin'
     await form.trigger('username')
-    await nextTick()
 
     expect(form.errors.username?.message).toBe('Username cannot be admin')
   })
@@ -169,12 +163,11 @@ describe('useForm', () => {
 
     form.values.username = 'taken'
     await form.trigger('username')
-    await nextTick()
 
     expect(form.errors.username?.message).toBe('Username is already taken')
   })
 
-  it.skip('should track form state - isDirty', async () => {
+  it('should track form state - isDirty', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -184,11 +177,9 @@ describe('useForm', () => {
     expect(form.state.isDirty).toBe(false)
 
     form.values.username = 'changed'
-    await nextTick()
 
     const registerProps = form.register('username')
     registerProps.onBlur({ target: { value: 'changed', name: 'username' } })
-    await nextTick()
 
     expect(form.state.isDirty).toBe(true)
   })
@@ -206,7 +197,6 @@ describe('useForm', () => {
 
     form.values.username = ''
     await form.trigger('username')
-    await nextTick()
 
     expect(form.state.isValid).toBe(false)
   })
@@ -225,7 +215,6 @@ describe('useForm', () => {
     const handleSubmit = form.handleSubmit(onSubmit)
 
     await handleSubmit({ preventDefault: vi.fn() })
-    await nextTick()
 
     expect(onSubmit).toHaveBeenCalledWith({ username: 'testuser' }, expect.any(Object))
     expect(form.state.isSubmitSuccessful).toBe(true)
@@ -246,14 +235,13 @@ describe('useForm', () => {
     const handleSubmit = form.handleSubmit(onSubmit, onInvalid)
 
     await handleSubmit({ preventDefault: vi.fn() })
-    await nextTick()
 
     expect(onSubmit).not.toHaveBeenCalled()
     expect(onInvalid).toHaveBeenCalled()
     expect(form.state.isSubmitSuccessful).toBe(false)
   })
 
-  it('should reset form to default values', async () => {
+  it('should reset form to default values', () => {
     const form = useForm({
       defaultValues: {
         username: 'initial',
@@ -265,13 +253,12 @@ describe('useForm', () => {
     form.values.email = 'changed@example.com'
 
     form.reset()
-    await nextTick()
 
     expect(form.values.username).toBe('initial')
     expect(form.values.email).toBe('initial@example.com')
   })
 
-  it('should reset form with new values', async () => {
+  it('should reset form with new values', () => {
     const form = useForm({
       defaultValues: {
         username: 'initial',
@@ -279,12 +266,11 @@ describe('useForm', () => {
     })
 
     form.reset({ username: 'newvalue' })
-    await nextTick()
 
     expect(form.values.username).toBe('newvalue')
   })
 
-  it('should reset a specific field', async () => {
+  it('should reset a specific field', () => {
     const form = useForm({
       defaultValues: {
         username: 'initial',
@@ -296,13 +282,12 @@ describe('useForm', () => {
     form.values.email = 'changed@example.com'
 
     form.resetField('username')
-    await nextTick()
 
     expect(form.values.username).toBe('initial')
     expect(form.values.email).toBe('changed@example.com')
   })
 
-  it('should update field value', async () => {
+  it('should update field value', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -310,12 +295,11 @@ describe('useForm', () => {
     })
 
     form.update('username', 'newvalue')
-    await nextTick()
 
     expect(form.values.username).toBe('newvalue')
   })
 
-  it('should update field value with options', async () => {
+  it('should update field value with options', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -326,13 +310,12 @@ describe('useForm', () => {
       shouldDirty: true,
       shouldTouch: true,
     })
-    await nextTick()
 
     expect(form.state.fields.username.isDirty).toBe(true)
     expect(form.state.fields.username.isTouched).toBe(true)
   })
 
-  it('should set error manually', async () => {
+  it('should set error manually', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -343,7 +326,6 @@ describe('useForm', () => {
       type: 'manual',
       message: 'Custom error',
     })
-    await nextTick()
 
     expect(form.errors.username?.message).toBe('Custom error')
   })
@@ -359,12 +341,10 @@ describe('useForm', () => {
     form.register('username', { required: 'Required' })
     form.values.username = ''
     await form.trigger('username')
-    await nextTick()
 
     expect(form.errors.username).toBeDefined()
 
     form.clearError('username')
-    await nextTick()
 
     expect(form.errors.username).toBeUndefined()
   })
@@ -387,7 +367,6 @@ describe('useForm', () => {
     form.values.age = 20
 
     await form.trigger()
-    await nextTick()
 
     expect(form.state.isValid).toBe(true)
   })
@@ -409,7 +388,6 @@ describe('useForm', () => {
     form.values.user.email = 'john@example.com'
 
     await form.trigger()
-    await nextTick()
 
     expect(form.state.isValid).toBe(true)
     expect(form.values.user.name).toBe('John')
@@ -426,13 +404,12 @@ describe('useForm', () => {
     form.values.tags[0] = 'vue'
 
     await form.trigger('tags.0')
-    await nextTick()
 
     expect(form.state.isValid).toBe(true)
     expect(form.values.tags[0]).toBe('vue')
   })
 
-  it('should unregister field', async () => {
+  it('should unregister field', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -447,7 +424,6 @@ describe('useForm', () => {
     expect(form.control.names.mount).toContain('email')
 
     form.unregister('username')
-    await nextTick()
 
     expect(form.control.names.mount).not.toContain('username')
     expect(form.control.names.mount).toContain('email')
@@ -476,7 +452,6 @@ describe('useForm', () => {
     form.values.username = ''
 
     await form.trigger('username')
-    await nextTick()
 
     // In onSubmit mode, validation should still work when triggered manually
     expect(form.errors.username).toBeDefined()
@@ -533,12 +508,10 @@ describe('useForm', () => {
     expect(form.state.submitCount).toBe(0)
 
     await handleSubmit({ preventDefault: vi.fn() })
-    await nextTick()
 
     expect(form.state.submitCount).toBe(1)
 
     await handleSubmit({ preventDefault: vi.fn() })
-    await nextTick()
 
     expect(form.state.submitCount).toBe(2)
   })
@@ -557,7 +530,6 @@ describe('useForm', () => {
 
     // Wait for async default values to resolve
     await new Promise(resolve => setTimeout(resolve, 50))
-    await nextTick()
 
     expect(form.state.isLoading).toBe(false)
     expect(form.values.username).toBe('async')

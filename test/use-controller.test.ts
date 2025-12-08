@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
 import { useController, useForm } from '../src'
 import { EVENTS } from '../src/constants'
 
@@ -20,7 +19,7 @@ describe('useController', () => {
     expect(controller.field.value).toBe('')
   })
 
-  it('should handle field value changes', async () => {
+  it('should handle field value changes', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -33,12 +32,11 @@ describe('useController', () => {
     })
 
     controller.field.value = 'newvalue'
-    await nextTick()
 
     expect(form.values.username).toBe('newvalue')
   })
 
-  it('should handle onChange event', async () => {
+  it('should handle onChange event', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -57,7 +55,6 @@ describe('useController', () => {
       },
       type: EVENTS.CHANGE,
     })
-    await nextTick()
 
     expect(form.values.username).toBe('newvalue')
   })
@@ -100,7 +97,6 @@ describe('useController', () => {
 
     form.values.username = ''
     await form.trigger('username')
-    await nextTick()
 
     expect(controller.state.error).toBeDefined()
     expect(controller.state.error?.message).toBe('Required')
@@ -138,7 +134,7 @@ describe('useController', () => {
     expect(controller.field.disabled).toBe(true)
   })
 
-  it('should handle nested field paths', async () => {
+  it('should handle nested field paths', () => {
     const form = useForm({
       defaultValues: {
         user: {
@@ -153,12 +149,11 @@ describe('useController', () => {
     })
 
     controller.field.value = 'John'
-    await nextTick()
 
     expect(form.values.user.name).toBe('John')
   })
 
-  it('should handle array field paths', async () => {
+  it('should handle array field paths', () => {
     const form = useForm({
       defaultValues: {
         tags: [''],
@@ -171,12 +166,11 @@ describe('useController', () => {
     })
 
     controller.field.value = 'vue'
-    await nextTick()
 
     expect(form.values.tags[0]).toBe('vue')
   })
 
-  it('should handle defaultValue', async () => {
+  it('should handle defaultValue', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -189,12 +183,10 @@ describe('useController', () => {
       defaultValue: 'default',
     })
 
-    await nextTick()
-
     expect(controller.field.value).toBe('default')
   })
 
-  it('should unregister on unmount when shouldUnregister is true', async () => {
+  it('should unregister on unmount when shouldUnregister is true', () => {
     const form = useForm({
       defaultValues: {
         username: '',
@@ -213,7 +205,6 @@ describe('useController', () => {
     // In a real component, onUnmounted would be called automatically
     // For testing, we can manually check the unregister behavior
     form.unregister('username')
-    await nextTick()
 
     expect(form.control.names.mount).not.toContain('username')
   })

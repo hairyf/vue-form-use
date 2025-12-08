@@ -4,7 +4,7 @@ import { reactiveComputed } from '@vueuse/shared'
 import { computed, reactive, ref } from 'vue'
 import { ELEMENT_EVENT_MAP, ELEMENT_VALUE_MAP } from '../constants'
 import { getRuleValue } from '../logic'
-import { get, isBrowser, isObject, set, unset } from '../utils'
+import { get, isComponentRef, isElementRef, isObject, set, unset } from '../utils'
 
 // eslint-disable-next-line ts/explicit-function-return-type
 export function useFieldRegistry(context: UseControlContext) {
@@ -61,35 +61,25 @@ export function useFieldRegistry(context: UseControlContext) {
     }
 
     const _p = reactiveComputed(() => {
-      if (isBrowser() && _f.ref instanceof Element) {
-        const TAG_NAME = (Reflect.get(_f.ref, 'type') || _f.ref.tagName).toUpperCase() as ElementMapKey
+      if (isElementRef(_f.ref)) {
+        const tag = (Reflect.get(_f.ref, 'type') || _f.ref.tagName).toUpperCase() as ElementMapKey
+        const { value, onChange, onBlur, ...rest } = $props
         return {
-          [ELEMENT_VALUE_MAP[TAG_NAME] || 'value']: $props.value,
-          [ELEMENT_EVENT_MAP[TAG_NAME] || 'onInput']: $props.onChange,
-          ref: $props.ref,
-          name,
-          onBlur: $props.onBlur,
+          [ELEMENT_VALUE_MAP[tag] || 'value']: value,
+          [ELEMENT_EVENT_MAP[tag] || 'onInput']: onChange,
+          ...rest,
         }
       }
 
-      if (_f.ref?.controller) {
+      if (isComponentRef(_f.ref)) {
         return {
-          value: $props.value,
-          onChange: $props.onChange,
-          ref: $props.ref,
-          name,
-          onBlur: $props.onBlur,
+          'modelValue': $props.value,
+          'onUpdate:modelValue': $props.onChange,
+          'ref': $props.ref,
         }
       }
 
-      return {
-        'modelValue': $props.value,
-        'onUpdate:modelValue': (value: any) => onChange({ target: { value, name } }),
-        'onChange': $props.onChange,
-        'onBlur': $props.onBlur,
-        'ref': $props.ref,
-        'name': name,
-      }
+      return $props
     })
 
     const field = reactive<any>({ _f, _p })
